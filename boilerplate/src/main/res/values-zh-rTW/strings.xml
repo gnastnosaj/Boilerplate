@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dynamicbox_exception_message">發現未知錯誤，請重試</string>
+    <string name="dynamicbox_exception_title">系統异常</string>
+    <string name="dynamicbox_internet_off_message">當前網絡已中斷，請開啟網絡</string>
+    <string name="dynamicbox_internet_off_title">網絡异常</string>
+    <string name="dynamicbox_loading_message"/>
+    <string name="dynamicbox_loading_title"/>
+    <string name="dynamicbox_retry">重試</string>
+</resources>

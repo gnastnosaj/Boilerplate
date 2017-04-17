@@ -1,0 +1,60 @@
+apply plugin: 'com.android.library'
+apply plugin: 'me.tatarka.retrolambda'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.3.1'
+
+    compile 'com.wanjian:cockroach:+'
+    compile 'com.jakewharton.timber:timber:+'
+    compile 'com.jiongbull:jlog:+'
+    compile 'io.reactivex.rxjava2:rxjava:+'
+    compile 'io.reactivex.rxjava2:rxandroid:+'
+    compile 'com.tbruyelle.rxpermissions2:rxpermissions:+'
+    compile 'zlc.season:rxdownload2:+'
+    compile 'com.jakewharton.rxbinding2:rxbinding:+'
+    compile 'com.squareup.retrofit2:retrofit:+'
+    compile 'com.squareup.okhttp3:okhttp:+'
+    compile 'com.facebook.fresco:fresco:+'
+
+    compile 'com.shizhefei:MVCHelper-Library:+'
+    compile 'com.shizhefei:MVCHelper-SwipeRefresh:+'
+    compile 'com.mikepenz:iconics-core:+'
+
+    compile 'net.qiujuer.genius:res:+'
+    compile 'com.githang:status-bar-compat:+'
+    compile 'com.github.medyo:dynamicbox:+'
+    compile 'com.wang.avi:library:+'
+    compile 'com.tuyenmonkey:mkloader:+'
+    compile 'com.airbnb.android:lottie:+'
+
+    testCompile 'junit:junit:4.12'
+}
