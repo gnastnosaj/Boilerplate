@@ -1,6 +1,6 @@
 package com.github.gnastnosaj.boilerplate;
 
-import android.content.Context;
+import android.app.Application;
 import android.content.pm.ApplicationInfo;
 
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
@@ -15,13 +15,21 @@ import timber.log.Timber;
 public class Boilerplate {
     public static boolean DEBUG = false;
 
-    public static void initialize(Context context) {
-        DEBUG = context.getApplicationInfo() != null && (context.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+    private static Application instance;
 
-        CrashReportingTree.initialize(context);
+    public static void initialize(Application application) {
+        instance = application;
+
+        DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+
+        CrashReportingTree.initialize(application);
 
         if(!DEBUG) {
             Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
         }
+    }
+
+    public static Application getInstance() {
+        return instance;
     }
 }
