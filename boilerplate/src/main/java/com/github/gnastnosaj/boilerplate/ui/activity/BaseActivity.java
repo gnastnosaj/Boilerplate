@@ -152,7 +152,7 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}));
     }
 
-    public static void dimissDynamicBox() {
+    public static void dismissDynamicBox() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL));
     }
 

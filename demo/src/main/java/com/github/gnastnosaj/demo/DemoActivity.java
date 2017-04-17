@@ -41,7 +41,7 @@ public class DemoActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(DemoActivity.this, "哈哈哈哈", Toast.LENGTH_SHORT).show();
-                dimissDynamicBox();
+                dismissDynamicBox();
             }
         });
     }
