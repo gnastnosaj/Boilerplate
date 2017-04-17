@@ -42,6 +42,7 @@ dependencies {
     compile 'zlc.season:rxdownload2:+'
     compile 'com.jakewharton.rxbinding2:rxbinding:+'
     compile 'com.squareup.retrofit2:retrofit:+'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:+'
     compile 'com.squareup.okhttp3:okhttp:+'
     compile 'com.facebook.fresco:fresco:+'
 
