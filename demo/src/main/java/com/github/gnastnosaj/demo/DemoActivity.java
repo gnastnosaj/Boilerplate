@@ -37,7 +37,7 @@ public class DemoActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        getDynamicBox().setClickListener(new View.OnClickListener() {
+        createDynamicBox().setClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(DemoActivity.this, "哈哈哈哈", Toast.LENGTH_SHORT).show();

@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ViewSwitcher;
 
 import com.githang.statusbar.StatusBarCompat;
 import com.github.gnastnosaj.boilerplate.R;
@@ -105,9 +107,20 @@ public class BaseActivity extends AppCompatActivity {
         initSystemBar(R.color.colorPrimaryDark);
     }
 
-    protected DynamicBox createDynamicBox(View view) {
+    protected DynamicBox createDynamicBox(View targetView) {
         if (dynamicBox == null) {
-            dynamicBox = new DynamicBox(this, view);
+            ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
+
+            dynamicBox = new DynamicBox(this, targetView);
+
+            if(targetView.getParent() instanceof ViewSwitcher) {
+                ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
+                ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
+                switcherLayoutParams.width = targetViewLayoutParams.width;
+                switcherLayoutParams.height = targetViewLayoutParams.height;
+                switcher.setLayoutParams(switcherLayoutParams);
+            }
+
             dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
             dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
             dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
