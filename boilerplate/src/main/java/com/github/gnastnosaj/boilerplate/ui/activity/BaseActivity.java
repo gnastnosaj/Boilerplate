@@ -86,15 +86,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (dynamicBox == null) {
-            createDynamicBox(findViewById(android.R.id.content));
-        }
-    }
-
-    @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
@@ -106,44 +97,43 @@ public class BaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
     }
 
-    protected void initSystemBar() {
-        StatusBarCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(R.color.colorPrimaryDark));
-    }
-
     protected void initSystemBar(int resource) {
         StatusBarCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(resource));
     }
 
-    protected void createDynamicBox(View view) {
-        dynamicBox = new DynamicBox(this, view);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
-
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
-
-        addDynamicBoxCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+    protected void initSystemBar() {
+        initSystemBar(R.color.colorPrimaryDark);
     }
 
-    protected DynamicBox getDynamicBox() {
+    protected DynamicBox createDynamicBox(View view) {
+        if (dynamicBox == null) {
+            dynamicBox = new DynamicBox(this, view);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
+
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
+
+            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+        }
         return dynamicBox;
     }
 
-    protected void addDynamicBoxCustomView(View customView, String tag) {
-        dynamicBox.addCustomView(customView, tag);
+    protected DynamicBox createDynamicBox() {
+        return createDynamicBox(findViewById(android.R.id.content));
     }
 
     public static void showDynamicBoxLoadingLayout() {
