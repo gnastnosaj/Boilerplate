@@ -48,7 +48,8 @@ dependencies {
 
     compile 'com.shizhefei:MVCHelper-Library:+'
     compile 'com.shizhefei:MVCHelper-SwipeRefresh:+'
-    compile 'com.mikepenz:iconics-core:+'
+    compile "com.mikepenz:iconics-core:2.8.3@aar"
+    compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
 
     compile 'net.qiujuer.genius:res:+'
     compile 'com.githang:status-bar-compat:+'
