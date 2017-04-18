@@ -28,7 +28,7 @@ public class DemoActivity extends BaseActivity {
         Observable.timer(3, TimeUnit.SECONDS).subscribeOn(Schedulers.io()).subscribe(new Consumer<Long>() {
             @Override
             public void accept(@NonNull Long aLong) throws Exception {
-                showDynamicBoxExceptionLayout();
+                showDynamicBoxExceptionLayout(DemoActivity.this);
             }
         });
     }

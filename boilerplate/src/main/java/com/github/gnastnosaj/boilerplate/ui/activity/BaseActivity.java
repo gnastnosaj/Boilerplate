@@ -1,6 +1,7 @@
 package com.github.gnastnosaj.boilerplate.ui.activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +60,9 @@ public class BaseActivity extends AppCompatActivity {
         dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
         dynamicBoxDisposable = dynamicBoxObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
             if (dynamicBox != null) {
+                if(dynamicBoxEvent.context != null && !dynamicBoxEvent.context.equals(this)) {
+                    return;
+                }
                 switch (dynamicBoxEvent.type) {
                     case DynamicBoxEvent.TYPE_LOADING_LAYOUT:
                         dynamicBox.showLoadingLayout();
@@ -153,20 +157,40 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT));
     }
 
+    public static void showDynamicBoxLoadingLayout(Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT, context));
+    }
+
     public static void showDynamicBoxInternetOffLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT));
+    }
+
+    public static void showDynamicBoxInternetOffLayout(Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT, context));
     }
 
     public static void showDynamicBoxExceptionLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT));
     }
 
+    public static void showDynamicBoxExceptionLayout(Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT, context));
+    }
+
     public static void showDynamicBoxCustomView(String tag) {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}));
     }
 
+    public static void showDynamicBoxCustomView(String tag, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}, context));
+    }
+
     public static void dismissDynamicBox() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL));
+    }
+
+    public static void dismissDynamicBox(Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL, context));
     }
 
     private static class DynamicBoxEvent {
@@ -178,6 +202,7 @@ public class BaseActivity extends AppCompatActivity {
 
         int type;
         String[] args;
+        Context context;
 
         DynamicBoxEvent(int type) {
             this.type = type;
@@ -186,6 +211,17 @@ public class BaseActivity extends AppCompatActivity {
         DynamicBoxEvent(int type, String[] args) {
             this.type = type;
             this.args = args;
+        }
+
+        DynamicBoxEvent(int type, Context context) {
+            this.type = type;
+            this.context = context;
+        }
+
+        DynamicBoxEvent(int type, String[] args, Context context) {
+            this.type = type;
+            this.args = args;
+            this.context = context;
         }
     }
 }
