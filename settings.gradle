@@ -1,1 +1,1 @@
-include ':boilerplate', ':demo'
+include ':boilerplate', ':boilerplate-sample'

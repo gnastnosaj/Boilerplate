@@ -39,6 +39,7 @@ public class Boilerplate {
 
         patchManager = new PatchManager(application);
         patchManager.init(versionName);
+        patchManager.loadPatch();
 
         if (!DEBUG) {
             Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));

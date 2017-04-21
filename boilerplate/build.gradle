@@ -10,9 +10,6 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -28,9 +25,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
     compile 'com.android.support:appcompat-v7:25.3.1'
 
     compile 'com.alipay.euler:andfix:+'
@@ -42,6 +36,10 @@ dependencies {
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:+'
     compile 'zlc.season:rxdownload2:+'
     compile 'com.jakewharton.rxbinding2:rxbinding:+'
+    compile 'com.trello.rxlifecycle2:rxlifecycle:+'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-android:+'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:+'
+
     compile 'com.squareup.retrofit2:retrofit:+'
     compile 'com.squareup.retrofit2:adapter-rxjava2:+'
     compile 'com.squareup.okhttp3:okhttp:+'
@@ -57,6 +55,4 @@ dependencies {
     compile 'com.wang.avi:library:+'
     compile 'com.tuyenmonkey:mkloader:+'
     compile 'com.airbnb.android:lottie:+'
-
-    testCompile 'junit:junit:4.12'
 }

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,17 @@ import com.githang.statusbar.StatusBarCompat;
 import com.github.gnastnosaj.boilerplate.R;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import mehdi.sakout.dynamicbox.DynamicBox;
 import timber.log.Timber;
 
 /**
  * Created by jasontsang on 12/30/15.
  */
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends RxAppCompatActivity {
     public final static String DYNAMIC_BOX_AV_BALLPULSE = "_BallPulse";
     public final static String DYNAMIC_BOX_AV_BALLGRIDPULSE = "_BallGridPulse";
     public final static String DYNAMIC_BOX_AV_BALLSPINFADELOADER = "_BallSpinFadeLoader";
@@ -46,10 +45,9 @@ public class BaseActivity extends AppCompatActivity {
 
     public final static String DYNAMIC_BOX_LT_PRELOADER = "_Preloader";
 
-    private DynamicBox dynamicBox;
-    private Observable<DynamicBoxEvent> dynamicBoxObservable;
+    private final static Observable<DynamicBoxEvent> dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
 
-    private Disposable dynamicBoxDisposable;
+    private DynamicBox dynamicBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +55,7 @@ public class BaseActivity extends AppCompatActivity {
 
         new RxPermissions(this).request(Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe();
 
-        dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
-        dynamicBoxDisposable = dynamicBoxObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
+        dynamicBoxObservable.compose(bindToLifecycle()).observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
             if (dynamicBox != null) {
                 if (dynamicBoxEvent.context != null && !dynamicBoxEvent.context.equals(this)) {
                     return;
@@ -82,13 +79,6 @@ public class BaseActivity extends AppCompatActivity {
                 }
             }
         }, throwable -> Timber.e(throwable, "dynamicBoxDisposable error"));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dynamicBoxDisposable.dispose();
-        RxBus.getInstance().unregister(DynamicBoxEvent.class, dynamicBoxObservable);
     }
 
     @Override
