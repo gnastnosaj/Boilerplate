@@ -153,6 +153,7 @@ public class BaseActivity extends AppCompatActivity {
         return createDynamicBox(findViewById(android.R.id.content));
     }
 
+    @Deprecated
     public static void showDynamicBoxLoadingLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT));
     }
@@ -161,6 +162,7 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT, context));
     }
 
+    @Deprecated
     public static void showDynamicBoxInternetOffLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT));
     }
@@ -169,6 +171,7 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT, context));
     }
 
+    @Deprecated
     public static void showDynamicBoxExceptionLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT));
     }
@@ -177,6 +180,7 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT, context));
     }
 
+    @Deprecated
     public static void showDynamicBoxCustomView(String tag) {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}));
     }
@@ -185,6 +189,7 @@ public class BaseActivity extends AppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}, context));
     }
 
+    @Deprecated
     public static void dismissDynamicBox() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL));
     }

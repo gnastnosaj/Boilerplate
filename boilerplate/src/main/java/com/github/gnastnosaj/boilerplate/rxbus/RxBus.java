@@ -69,7 +69,7 @@ public class RxBus {
         }
     }
 
-    public class RxBusEvent {
+    public static class RxBusEvent {
         public final static int CREATE = 0;
         public final static int ADD = 1;
         public final static int REMOVE = 2;
@@ -79,14 +79,11 @@ public class RxBus {
         private int type;
         private Observable observable;
 
-        private RxBusEvent() {
-        }
-
-        private RxBusEvent(@NonNull Object tag, int type) {
+        private RxBusEvent(Object tag, int type) {
             this(tag, type, null);
         }
 
-        private RxBusEvent(@NonNull Object tag, int type, Observable observable) {
+        private RxBusEvent(Object tag, int type, Observable observable) {
             this.tag = tag;
             this.type = type;
             this.observable = observable;
@@ -96,24 +93,12 @@ public class RxBus {
             return tag;
         }
 
-        public void setTag(@NonNull Object tag) {
-            this.tag = tag;
-        }
-
         public int getType() {
             return type;
         }
 
-        public void setType(int type) {
-            this.type = type;
-        }
-
         public Observable getObservable() {
             return observable;
-        }
-
-        public void setObservable(Observable observable) {
-            this.observable = observable;
         }
     }
 }
