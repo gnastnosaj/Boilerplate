@@ -24,7 +24,7 @@ public class MainActivity extends BaseActivity {
         Observable.timer(3, TimeUnit.SECONDS).compose(this.<Long>bindToLifecycle()).subscribe(new Consumer<Long>() {
             @Override
             public void accept(@NonNull Long aLong) throws Exception {
-                showDynamicBoxCustomView(DYNAMIC_BOX_MK_CLASSICSPINNER, MainActivity.this);
+                showDynamicBoxCustomView(DYNAMIC_BOX_MK_WHIRLPOOL, MainActivity.this);
             }
         });
     }
