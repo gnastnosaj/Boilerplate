@@ -60,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
         dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
         dynamicBoxDisposable = dynamicBoxObservable.observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
             if (dynamicBox != null) {
-                if(dynamicBoxEvent.context != null && !dynamicBoxEvent.context.equals(this)) {
+                if (dynamicBoxEvent.context != null && !dynamicBoxEvent.context.equals(this)) {
                     return;
                 }
                 switch (dynamicBoxEvent.type) {
@@ -117,7 +117,7 @@ public class BaseActivity extends AppCompatActivity {
 
             dynamicBox = new DynamicBox(this, targetView);
 
-            if(targetView.getParent() instanceof ViewSwitcher) {
+            if (targetView.getParent() instanceof ViewSwitcher) {
                 ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
                 ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
                 switcherLayoutParams.width = targetViewLayoutParams.width;
