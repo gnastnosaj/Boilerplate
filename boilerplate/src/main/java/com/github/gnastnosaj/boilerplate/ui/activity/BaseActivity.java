@@ -53,7 +53,7 @@ public class BaseActivity extends RxAppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        new RxPermissions(this).request(Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe();
+        new RxPermissions(this).request(Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe();
 
         dynamicBoxObservable.compose(bindToLifecycle()).observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
             if (dynamicBox != null) {
