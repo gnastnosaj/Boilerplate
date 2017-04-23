@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.alipay.euler.andfix.patch.PatchManager;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.wanjian.cockroach.Cockroach;
 
@@ -44,6 +45,8 @@ public class Boilerplate {
         if (!DEBUG) {
             Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
         }
+
+        Fresco.initialize(application);
     }
 
     public static Application getInstance() {
