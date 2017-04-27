@@ -7,4 +7,13 @@
     <string name="dynamicbox_loading_message"/>
     <string name="dynamicbox_loading_title"/>
     <string name="dynamicbox_retry">リトライ</string>
+
+    <string name="mvchelper_load_loading">ロード中…</string>
+    <string name="mvchelper_load_fail">負荷失敗</string>
+    <string name="mvchelper_load_tryagain">リトライ</string>
+    <string name="mvchelper_load_empty">暫時データ</string>
+    <string name="mvchelper_loadMore_normal">クリックしてもっと</string>
+    <string name="mvchelper_loadMore_loading">アドイン中…</string>
+    <string name="mvchelper_loadMore_fail">失敗をロードし、再ロードをクリック</string>
+    <string name="mvchelper_loadMore_nomore">ロード済み</string>
 </resources>

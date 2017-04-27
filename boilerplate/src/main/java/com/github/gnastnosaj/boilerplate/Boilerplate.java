@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
+import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
+import com.shizhefei.mvc.MVCHelper;
 import com.wanjian.cockroach.Cockroach;
 
 import timber.log.Timber;
@@ -47,6 +49,7 @@ public class Boilerplate {
         }
 
         Fresco.initialize(application);
+        MVCHelper.setLoadViewFractory(new LoadViewFactory());
     }
 
     public static Application getInstance() {
