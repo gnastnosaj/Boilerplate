@@ -6,11 +6,15 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.alipay.euler.andfix.patch.PatchManager;
+import com.facebook.drawee.backends.pipeline.DraweeConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.wanjian.cockroach.Cockroach;
+
+import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -27,6 +31,15 @@ public class Boilerplate {
     private static PatchManager patchManager;
 
     public static void initialize(Application application) {
+        initialize(application, null, null);
+    }
+
+    public static void initialize(Application application, @Nullable ImagePipelineConfig imagePipelineConfig) {
+        initialize(application, imagePipelineConfig, null);
+    }
+
+    public static void initialize(Application application, @Nullable ImagePipelineConfig imagePipelineConfig,
+                                  @Nullable DraweeConfig draweeConfig) {
         instance = application;
 
         DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
@@ -48,7 +61,7 @@ public class Boilerplate {
             Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
         }
 
-        Fresco.initialize(application);
+        Fresco.initialize(application, imagePipelineConfig, draweeConfig);
         MVCHelper.setLoadViewFractory(new LoadViewFactory());
     }
 

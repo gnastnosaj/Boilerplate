@@ -47,6 +47,7 @@ dependencies {
     compile 'com.facebook.fresco:animated-gif:+'
     compile 'com.facebook.fresco:animated-webp:+'
     compile 'com.facebook.fresco:webpsupport:+'
+    compile "com.facebook.fresco:imagepipeline-okhttp3:+"
 
     compile 'com.shizhefei:MVCHelper-Library:+'
     compile 'com.shizhefei:MVCHelper-SwipeRefresh:+'
