@@ -23,7 +23,7 @@ public class RxBus {
         return rxBus;
     }
 
-    private final Subject bus = PublishSubject.create();
+    private final Subject bus = PublishSubject.create().toSerialized();
 
     public Observable<Object> toObserverable() {
         return bus;
@@ -42,7 +42,7 @@ public class RxBus {
             subjectMapper.put(tag, subjectList);
             send(new RxBusEvent(tag, RxBusEvent.CREATE));
         }
-        Subject subject = PublishSubject.create();
+        Subject subject = PublishSubject.create().toSerialized();
         subjectList.add(subject);
         send(new RxBusEvent(tag, RxBusEvent.ADD, subject));
         return subject;
@@ -51,7 +51,7 @@ public class RxBus {
     public void unregister(@NonNull Object tag, @NonNull Observable observable) {
         List<Subject> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
-            subjectList.remove((Subject) observable);
+            subjectList.remove(observable);
             send(new RxBusEvent(tag, RxBusEvent.REMOVE, observable));
             if (subjectList.isEmpty()) {
                 subjectMapper.remove(tag);
