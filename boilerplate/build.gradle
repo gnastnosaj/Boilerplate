@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
     }
@@ -24,15 +24,18 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 
     compile 'com.alipay.euler:andfix:+'
     compile 'com.wanjian:cockroach:+'
     compile 'com.jakewharton.timber:timber:+'
     compile 'com.jiongbull:jlog:+'
+
     compile 'io.reactivex.rxjava2:rxjava:+'
     compile 'io.reactivex.rxjava2:rxandroid:+'
+
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:+'
     compile 'zlc.season:rxdownload2:+'
     compile 'com.jakewharton.rxbinding2:rxbinding:+'
@@ -43,16 +46,20 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:+'
     compile 'com.squareup.retrofit2:adapter-rxjava2:+'
     compile 'com.squareup.okhttp3:okhttp:+'
+
     compile 'com.facebook.fresco:fresco:+'
     compile 'com.facebook.fresco:animated-gif:+'
     compile 'com.facebook.fresco:animated-webp:+'
     compile 'com.facebook.fresco:webpsupport:+'
-    compile "com.facebook.fresco:imagepipeline-okhttp3:+"
+    compile 'com.facebook.fresco:imagepipeline-okhttp3:+'
 
     compile 'com.shizhefei:MVCHelper-Library:+'
     compile 'com.shizhefei:MVCHelper-SwipeRefresh:+'
+    compile('me.drakeet.multitype:multitype:+') {
+        exclude group: 'com.android.support'
+    }
 
-    compile "com.mikepenz:iconics-core:+"
+    compile 'com.mikepenz:iconics-core:+'
     compile 'net.qiujuer.genius:res:+'
     compile 'com.githang:status-bar-compat:+'
     compile 'com.github.medyo:dynamicbox:+'
