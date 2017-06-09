@@ -2,8 +2,8 @@ package com.github.gnastnosaj.boilerplate;
 
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.support.annotation.Nullable;
 
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.facebook.drawee.backends.pipeline.DraweeConfig;
@@ -13,8 +13,6 @@ import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.wanjian.cockroach.Cockroach;
-
-import javax.annotation.Nullable;
 
 import timber.log.Timber;
 
@@ -47,8 +45,8 @@ public class Boilerplate {
         CrashReportingTree.initialize(application);
 
         try {
-            versionName = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageInfo.INSTALL_LOCATION_AUTO).versionName;
-            versionCode = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageInfo.INSTALL_LOCATION_AUTO).versionCode;
+            versionName = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
+            versionCode = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionCode;
         } catch (PackageManager.NameNotFoundException e) {
             Timber.e(e, "Boilerplateh initialize Exception");
         }
