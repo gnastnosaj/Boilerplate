@@ -40,29 +40,7 @@ public class Boilerplate {
     @Deprecated
     public static void initialize(Application application, @Nullable ImagePipelineConfig imagePipelineConfig,
                                   @Nullable DraweeConfig draweeConfig) {
-        instance = application;
-
-        DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-
-        CrashReportingTree.initialize(application);
-
-        try {
-            versionName = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
-            versionCode = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            Timber.e(e, "Boilerplateh initialize Exception");
-        }
-
-        patchManager = new PatchManager(application);
-        patchManager.init(versionName);
-        patchManager.loadPatch();
-
-        if (!DEBUG) {
-            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
-        }
-
-        Fresco.initialize(application, imagePipelineConfig, draweeConfig);
-        MVCHelper.setLoadViewFractory(new LoadViewFactory());
+        initialize(application, new Config.Builder().setImagePipelineConfig(imagePipelineConfig).setDraweeConfig(draweeConfig).build());
     }
 
     public static void initialize(Application application, Config config) {
