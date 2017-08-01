@@ -15,6 +15,10 @@ import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import mehdi.sakout.dynamicbox.DynamicBox;
@@ -47,7 +51,7 @@ public class BaseActivity extends RxAppCompatActivity {
 
     private final static Observable<DynamicBoxEvent> dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
 
-    private DynamicBox dynamicBox;
+    private List<DynamicBox> dynamicBoxes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +60,35 @@ public class BaseActivity extends RxAppCompatActivity {
         new RxPermissions(this).request(Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe();
 
         dynamicBoxObservable.compose(bindToLifecycle()).observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
-            if (dynamicBox != null) {
+            if (!dynamicBoxes.isEmpty()) {
                 if (dynamicBoxEvent.context != null && !dynamicBoxEvent.context.equals(this)) {
                     return;
                 }
-                switch (dynamicBoxEvent.type) {
-                    case DynamicBoxEvent.TYPE_LOADING_LAYOUT:
-                        dynamicBox.showLoadingLayout();
-                        break;
-                    case DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT:
-                        dynamicBox.showInternetOffLayout();
-                        break;
-                    case DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT:
-                        dynamicBox.showExceptionLayout();
-                        break;
-                    case DynamicBoxEvent.TYPE_CUSTOM_VIEW:
-                        dynamicBox.showCustomView(dynamicBoxEvent.args[0]);
-                        break;
-                    case DynamicBoxEvent.TYPE_HIDE_ALL:
-                        dynamicBox.hideAll();
-                        break;
+                for (DynamicBox dynamicBox : dynamicBoxes) {
+                    if (dynamicBoxEvent.args != null) {
+                        if (dynamicBoxEvent.args.length > 1 || dynamicBoxEvent.type != DynamicBoxEvent.TYPE_CUSTOM_VIEW) {
+                            if (!Arrays.asList(dynamicBoxEvent.args).contains(dynamicBox)) {
+                                continue;
+                            }
+                        }
+                    }
+                    switch (dynamicBoxEvent.type) {
+                        case DynamicBoxEvent.TYPE_LOADING_LAYOUT:
+                            dynamicBox.showLoadingLayout();
+                            break;
+                        case DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT:
+                            dynamicBox.showInternetOffLayout();
+                            break;
+                        case DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT:
+                            dynamicBox.showExceptionLayout();
+                            break;
+                        case DynamicBoxEvent.TYPE_CUSTOM_VIEW:
+                            dynamicBox.showCustomView((String) dynamicBoxEvent.args[0]);
+                            break;
+                        case DynamicBoxEvent.TYPE_HIDE_ALL:
+                            dynamicBox.hideAll();
+                            break;
+                    }
                 }
             }
         }, throwable -> Timber.e(throwable, "dynamicBoxDisposable error"));
@@ -102,40 +115,40 @@ public class BaseActivity extends RxAppCompatActivity {
     }
 
     protected DynamicBox createDynamicBox(View targetView) {
-        if (dynamicBox == null) {
-            ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
+        ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
 
-            dynamicBox = new DynamicBox(this, targetView);
+        DynamicBox dynamicBox = new DynamicBox(this, targetView);
+        dynamicBoxes.add(dynamicBox);
 
-            if (targetView.getParent() instanceof ViewSwitcher) {
-                ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
-                ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
-                switcherLayoutParams.width = targetViewLayoutParams.width;
-                switcherLayoutParams.height = targetViewLayoutParams.height;
-                switcher.setLayoutParams(switcherLayoutParams);
-            }
-
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
-
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
-
-            dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+        if (targetView.getParent() instanceof ViewSwitcher) {
+            ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
+            ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
+            switcherLayoutParams.width = targetViewLayoutParams.width;
+            switcherLayoutParams.height = targetViewLayoutParams.height;
+            switcher.setLayoutParams(switcherLayoutParams);
         }
+
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
+
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
+
+        dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+
         return dynamicBox;
     }
 
@@ -152,6 +165,14 @@ public class BaseActivity extends RxAppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT, context));
     }
 
+    public static void showDynamicBoxLoadingLayout(DynamicBox dynamicBox, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT, new Object[]{dynamicBox}, context));
+    }
+
+    public static void showDynamicBoxLoadingLayout(DynamicBox[] dynamicBoxes, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_LOADING_LAYOUT, dynamicBoxes, context));
+    }
+
     @Deprecated
     public static void showDynamicBoxInternetOffLayout() {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT));
@@ -159,6 +180,14 @@ public class BaseActivity extends RxAppCompatActivity {
 
     public static void showDynamicBoxInternetOffLayout(Context context) {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT, context));
+    }
+
+    public static void showDynamicBoxInternetOffLayout(DynamicBox dynamicBox, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT, new Object[]{dynamicBox}, context));
+    }
+
+    public static void showDynamicBoxInternetOffLayout(DynamicBox[] dynamicBoxes, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_INTERNET_OFF_LAYOUT, dynamicBoxes, context));
     }
 
     @Deprecated
@@ -170,13 +199,32 @@ public class BaseActivity extends RxAppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT, context));
     }
 
+    public static void showDynamicBoxExceptionLayout(DynamicBox dynamicBox, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT, new Object[]{dynamicBox}, context));
+    }
+
+    public static void showDynamicBoxExceptionLayout(DynamicBox[] dynamicBoxes, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_EXCEPTION_LAYOUT, dynamicBoxes, context));
+    }
+
     @Deprecated
     public static void showDynamicBoxCustomView(String tag) {
-        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}));
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new Object[]{tag}));
     }
 
     public static void showDynamicBoxCustomView(String tag, Context context) {
-        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new String[]{tag}, context));
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new Object[]{tag}, context));
+    }
+
+    public static void showDynamicBoxCustomView(DynamicBox dynamicBox, String tag, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, new Object[]{tag, dynamicBox}, context));
+    }
+
+    public static void showDynamicBoxCustomView(String tag, DynamicBox[] dynamicBoxes, Context context) {
+        List args = new ArrayList();
+        args.add(tag);
+        args.addAll(Arrays.asList(dynamicBoxes));
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_CUSTOM_VIEW, args.toArray(), context));
     }
 
     @Deprecated
@@ -188,6 +236,14 @@ public class BaseActivity extends RxAppCompatActivity {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL, context));
     }
 
+    public static void dismissDynamicBox(DynamicBox dynamicBox, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL, new Object[]{dynamicBox}, context));
+    }
+
+    public static void dismissDynamicBox(DynamicBox[] dynamicBoxes, Context context) {
+        RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL, dynamicBoxes, context));
+    }
+
     private static class DynamicBoxEvent {
         final static int TYPE_LOADING_LAYOUT = 0;
         final static int TYPE_INTERNET_OFF_LAYOUT = 1;
@@ -196,14 +252,14 @@ public class BaseActivity extends RxAppCompatActivity {
         final static int TYPE_HIDE_ALL = 4;
 
         int type;
-        String[] args;
+        Object[] args;
         Context context;
 
         DynamicBoxEvent(int type) {
             this.type = type;
         }
 
-        DynamicBoxEvent(int type, String[] args) {
+        DynamicBoxEvent(int type, Object[] args) {
             this.type = type;
             this.args = args;
         }
@@ -213,7 +269,7 @@ public class BaseActivity extends RxAppCompatActivity {
             this.context = context;
         }
 
-        DynamicBoxEvent(int type, String[] args, Context context) {
+        DynamicBoxEvent(int type, Object[] args, Context context) {
             this.type = type;
             this.args = args;
             this.context = context;
