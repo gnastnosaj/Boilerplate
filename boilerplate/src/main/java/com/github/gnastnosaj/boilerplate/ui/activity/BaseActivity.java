@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,13 @@ public class BaseActivity extends RxAppCompatActivity {
 
     public final static String DYNAMIC_BOX_LT_PRELOADER = "_Preloader";
 
+    public final static String PENDING_TRANSITION_LEFT_RIGHT = "_left_right";
+
     private final static Observable<DynamicBoxEvent> dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
 
     private List<DynamicBox> dynamicBoxes = new ArrayList<>();
+
+    private String pendingTransition = PENDING_TRANSITION_LEFT_RIGHT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +102,21 @@ public class BaseActivity extends RxAppCompatActivity {
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+        if (!TextUtils.isEmpty(pendingTransition)) {
+            if (pendingTransition.equals(PENDING_TRANSITION_LEFT_RIGHT)) {
+                overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
+            }
+        }
     }
 
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+        if (!TextUtils.isEmpty(pendingTransition)) {
+            if (pendingTransition.equals(PENDING_TRANSITION_LEFT_RIGHT)) {
+                overridePendingTransition(R.anim.in_from_left, R.anim.out_to_right);
+            }
+        }
     }
 
     protected void initSystemBar(int resource) {
@@ -148,6 +161,84 @@ public class BaseActivity extends RxAppCompatActivity {
         dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
 
         dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+
+        return dynamicBox;
+    }
+
+    protected DynamicBox createDynamicBox(View targetView, String[] tags) {
+        ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
+
+        DynamicBox dynamicBox = new DynamicBox(this, targetView);
+        dynamicBoxes.add(dynamicBox);
+
+        if (targetView.getParent() instanceof ViewSwitcher) {
+            ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
+            ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
+            switcherLayoutParams.width = targetViewLayoutParams.width;
+            switcherLayoutParams.height = targetViewLayoutParams.height;
+            switcher.setLayoutParams(switcherLayoutParams);
+        }
+
+        if (tags != null) {
+            List tagList = Arrays.asList(tags);
+
+            if (tagList.contains(DYNAMIC_BOX_AV_BALLPULSE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_AV_BALLGRIDPULSE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_AV_BALLSPINFADELOADER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
+            }
+            if (tagList.contains(DYNAMIC_BOX_AV_LINESCALEPARTY)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
+            }
+            if (tagList.contains(DYNAMIC_BOX_AV_PACMAN)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
+            }
+
+            if (tagList.contains(DYNAMIC_BOX_MK_SHARINGAN)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_TWINFISHESSPINNER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_CLASSICSPINNER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_LINESPINNER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_FISHSPINNER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_PHONEWAVE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_THREEPULSE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_FOURPULSE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_FIVEPULSE)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_WORM)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_WHIRLPOOL)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
+            }
+            if (tagList.contains(DYNAMIC_BOX_MK_RADAR)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
+            }
+
+            if (tagList.contains(DYNAMIC_BOX_LT_PRELOADER)) {
+                dynamicBox.addCustomView(LayoutInflater.from(this).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+            }
+        }
 
         return dynamicBox;
     }
@@ -242,6 +333,10 @@ public class BaseActivity extends RxAppCompatActivity {
 
     public static void dismissDynamicBox(DynamicBox[] dynamicBoxes, Context context) {
         RxBus.getInstance().post(DynamicBoxEvent.class, new DynamicBoxEvent(DynamicBoxEvent.TYPE_HIDE_ALL, dynamicBoxes, context));
+    }
+
+    public void setPendingTransition(String pendingTransition) {
+        this.pendingTransition = pendingTransition;
     }
 
     private static class DynamicBoxEvent {
