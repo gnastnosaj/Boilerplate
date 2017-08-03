@@ -170,7 +170,7 @@ public class BaseActivity extends RxAppCompatActivity {
             if (!TextUtils.isEmpty(switcherTransition)) {
                 if (switcherTransition.equals(SWITCHER_TRANSITION_LEFT_RIGHT)) {
                     switcher.setInAnimation(context, R.anim.in_from_right);
-                    switcher.setOutAnimation(context, R.anim.out_to_right);
+                    switcher.setOutAnimation(context, R.anim.out_to_left);
                 }
             }
         }
