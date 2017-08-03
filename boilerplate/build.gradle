@@ -62,7 +62,7 @@ dependencies {
     compile 'com.mikepenz:iconics-core:+'
     compile 'net.qiujuer.genius:res:+'
     compile 'com.githang:status-bar-compat:+'
-    compile 'com.github.gnastnosaj:Dynamicbox:0202dc8'
+    compile 'com.github.gnastnosaj:Dynamicbox:17cd556'
     compile 'com.wang.avi:library:+'
     compile 'com.tuyenmonkey:mkloader:+'
     compile 'com.airbnb.android:lottie:+'
