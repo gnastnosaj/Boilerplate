@@ -128,14 +128,8 @@ public class BaseActivity extends RxAppCompatActivity {
         initSystemBar(R.color.colorPrimaryDark);
     }
 
-    protected DynamicBox createDynamicBox(View targetView) {
-        DynamicBox dynamicBox = createDynamicBox(this, targetView);
-        dynamicBoxes.add(dynamicBox);
-        return dynamicBox;
-    }
-
-    protected DynamicBox createDynamicBox(View targetView, String switcherTransition) {
-        DynamicBox dynamicBox = createDynamicBox(this, targetView, switcherTransition);
+    protected DynamicBox createDynamicBox(View targetView, String[] tags, String switcherTransition) {
+        DynamicBox dynamicBox = createDynamicBox(this, targetView, tags, switcherTransition);
         dynamicBoxes.add(dynamicBox);
         return dynamicBox;
     }
@@ -146,8 +140,14 @@ public class BaseActivity extends RxAppCompatActivity {
         return dynamicBox;
     }
 
-    protected DynamicBox createDynamicBox(View targetView, String[] tags, String switcherTransition) {
-        DynamicBox dynamicBox = createDynamicBox(this, targetView, tags, switcherTransition);
+    protected DynamicBox createDynamicBox(View targetView, String switcherTransition) {
+        DynamicBox dynamicBox = createDynamicBox(this, targetView, switcherTransition);
+        dynamicBoxes.add(dynamicBox);
+        return dynamicBox;
+    }
+
+    protected DynamicBox createDynamicBox(View targetView) {
+        DynamicBox dynamicBox = createDynamicBox(this, targetView);
         dynamicBoxes.add(dynamicBox);
         return dynamicBox;
     }
