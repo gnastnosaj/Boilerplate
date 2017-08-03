@@ -51,6 +51,7 @@ public class BaseActivity extends RxAppCompatActivity {
     public final static String DYNAMIC_BOX_LT_PRELOADER = "_Preloader";
 
     public final static String PENDING_TRANSITION_LEFT_RIGHT = "_left_right";
+    public final static String SWITCHER_TRANSITION_LEFT_RIGHT = "_left_right";
 
     private final static Observable<DynamicBoxEvent> dynamicBoxObservable = RxBus.getInstance().register(DynamicBoxEvent.class, DynamicBoxEvent.class);
 
@@ -133,8 +134,20 @@ public class BaseActivity extends RxAppCompatActivity {
         return dynamicBox;
     }
 
+    protected DynamicBox createDynamicBox(View targetView, String switcherTransition) {
+        DynamicBox dynamicBox = createDynamicBox(this, targetView, switcherTransition);
+        dynamicBoxes.add(dynamicBox);
+        return dynamicBox;
+    }
+
     protected DynamicBox createDynamicBox(View targetView, String[] tags) {
         DynamicBox dynamicBox = createDynamicBox(this, targetView, tags);
+        dynamicBoxes.add(dynamicBox);
+        return dynamicBox;
+    }
+
+    protected DynamicBox createDynamicBox(View targetView, String[] tags, String switcherTransition) {
+        DynamicBox dynamicBox = createDynamicBox(this, targetView, tags, switcherTransition);
         dynamicBoxes.add(dynamicBox);
         return dynamicBox;
     }
@@ -143,7 +156,7 @@ public class BaseActivity extends RxAppCompatActivity {
         return createDynamicBox(findViewById(android.R.id.content));
     }
 
-    public static DynamicBox createDynamicBox(Context context, View targetView) {
+    private static DynamicBox prepareDynamicBox(Context context, View targetView, String switcherTransition) {
         ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
 
         DynamicBox dynamicBox = new DynamicBox(context, targetView);
@@ -154,44 +167,19 @@ public class BaseActivity extends RxAppCompatActivity {
             switcherLayoutParams.width = targetViewLayoutParams.width;
             switcherLayoutParams.height = targetViewLayoutParams.height;
             switcher.setLayoutParams(switcherLayoutParams);
+            if (!TextUtils.isEmpty(switcherTransition)) {
+                if (switcherTransition.equals(SWITCHER_TRANSITION_LEFT_RIGHT)) {
+                    switcher.setInAnimation(context, R.anim.in_from_right);
+                    switcher.setOutAnimation(context, R.anim.out_to_right);
+                }
+            }
         }
-
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
-
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
-
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
 
         return dynamicBox;
     }
 
-    public static DynamicBox createDynamicBox(Context context, View targetView, String[] tags) {
-        ViewGroup.LayoutParams targetViewLayoutParams = targetView.getLayoutParams();
-
-        DynamicBox dynamicBox = new DynamicBox(context, targetView);
-
-        if (targetView.getParent() instanceof ViewSwitcher) {
-            ViewSwitcher switcher = (ViewSwitcher) targetView.getParent();
-            ViewGroup.LayoutParams switcherLayoutParams = switcher.getLayoutParams();
-            switcherLayoutParams.width = targetViewLayoutParams.width;
-            switcherLayoutParams.height = targetViewLayoutParams.height;
-            switcher.setLayoutParams(switcherLayoutParams);
-        }
+    public static DynamicBox createDynamicBox(Context context, View targetView, String[] tags, String switcherTransition) {
+        DynamicBox dynamicBox = prepareDynamicBox(context, targetView, switcherTransition);
 
         if (tags != null) {
             List tagList = Arrays.asList(tags);
@@ -255,6 +243,41 @@ public class BaseActivity extends RxAppCompatActivity {
         }
 
         return dynamicBox;
+    }
+
+    public static DynamicBox createDynamicBox(Context context, View targetView, String switcherTransition) {
+        DynamicBox dynamicBox = prepareDynamicBox(context, targetView, switcherTransition);
+
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballpulse_avloading, null), DYNAMIC_BOX_AV_BALLPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballgridpulse_avloading, null), DYNAMIC_BOX_AV_BALLGRIDPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.ballspinfadeloader_avloading, null), DYNAMIC_BOX_AV_BALLSPINFADELOADER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
+
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
+
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+
+        return dynamicBox;
+    }
+
+    public static DynamicBox createDynamicBox(Context context, View targetView, String[] tags) {
+        return createDynamicBox(context, targetView, tags, null);
+    }
+
+    public static DynamicBox createDynamicBox(Context context, View targetView) {
+        return createDynamicBox(context, targetView, "");
     }
 
     @Deprecated
