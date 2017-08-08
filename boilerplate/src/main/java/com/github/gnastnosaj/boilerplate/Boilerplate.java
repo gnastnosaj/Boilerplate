@@ -60,7 +60,7 @@ public class Boilerplate {
             Timber.e(e, "Boilerplateh initialize Exception");
         }
 
-        if (config.leakCanary) {
+        if (DEBUG && config.leakCanary) {
             LeakCanary.install(application);
         }
 
@@ -157,7 +157,11 @@ public class Boilerplate {
     }
 
     public static boolean isInLeakCanaryAnalyzerProcess(Application application) {
-        return LeakCanary.isInAnalyzerProcess(application);
+        if (DEBUG) {
+            return LeakCanary.isInAnalyzerProcess(application);
+        } else {
+            return false;
+        }
     }
 
     public static PatchManager getPatchManager() {

@@ -28,9 +28,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:+'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:+'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:+'
+    compile 'com.squareup.leakcanary:leakcanary-android:+'
     compile 'com.wanjian:cockroach:+'
     compile 'com.alipay.euler:andfix:+'
 
