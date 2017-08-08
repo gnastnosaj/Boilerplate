@@ -1,31 +1,51 @@
 package com.github.gnastnosaj.boilerplate.sample;
 
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ViewFlipper;
 
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
-
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import com.github.gnastnosaj.boilerplate.ui.widget.PageFlipView;
 
 /**
  * Created by jasontsang on 4/21/17.
  */
 
 public class MainActivity extends BaseActivity {
+
+    PageFlipView mPageFlipView;
+    ViewFlipper mViewFlipper;
+
+    GestureDetector mGestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        createDynamicBox();
+        setContentView(R.layout.activity_main);
 
-        Observable.timer(3, TimeUnit.SECONDS).compose(this.<Long>bindToLifecycle()).subscribe(new Consumer<Long>() {
+        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
+        mViewFlipper = (ViewFlipper) findViewById(R.id.view_flipper);
+        mPageFlipView = new PageFlipView(this, mViewFlipper);
+        frameLayout.addView(mPageFlipView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        mGestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public void accept(@NonNull Long aLong) throws Exception {
-                showDynamicBoxCustomView(DYNAMIC_BOX_MK_WHIRLPOOL, MainActivity.this);
+            public boolean onDown(MotionEvent e) {
+                frameLayout.bringToFront();
+                mPageFlipView.onFingerDown(e.getX(), e.getY());
+                mPageFlipView.onFingerUp(e.getX(), e.getY());
+                return true;
             }
         });
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+    }
 }
+
