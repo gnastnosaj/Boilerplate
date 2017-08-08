@@ -12,6 +12,9 @@ public class SampleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Boilerplate.initialize(this);
+        if (Boilerplate.isInLeakCanaryAnalyzerProcess(this)) {
+            return;
+        }
+        Boilerplate.initialize(this, new Boilerplate.Config.Builder().leakCanary(true).build());
     }
 }

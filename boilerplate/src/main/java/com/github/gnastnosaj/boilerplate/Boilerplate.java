@@ -12,6 +12,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
+import com.squareup.leakcanary.LeakCanary;
 import com.wanjian.cockroach.Cockroach;
 
 import timber.log.Timber;
@@ -59,14 +60,18 @@ public class Boilerplate {
             Timber.e(e, "Boilerplateh initialize Exception");
         }
 
+        if (config.leakCanary) {
+            LeakCanary.install(application);
+        }
+
+        if (!DEBUG && config.cockroach) {
+            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
+        }
+
         if (config.patch) {
             patchManager = new PatchManager(application);
             patchManager.init(versionName);
             patchManager.loadPatch();
-        }
-
-        if (!DEBUG) {
-            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
         }
 
         if (config.fresco) {
@@ -81,11 +86,13 @@ public class Boilerplate {
     public static class Config {
         private boolean log = true;
 
+        private boolean leakCanary = false;
+        private boolean cockroach = true;
+        private boolean patch = true;
+
         private boolean fresco = true;
         private ImagePipelineConfig imagePipelineConfig;
         private DraweeConfig draweeConfig;
-
-        private boolean patch = true;
 
         private boolean mvc = true;
 
@@ -119,6 +126,16 @@ public class Boilerplate {
                 return this;
             }
 
+            public Builder cockroach(boolean enable) {
+                config.cockroach = enable;
+                return this;
+            }
+
+            public Builder leakCanary(boolean enable) {
+                config.leakCanary = enable;
+                return this;
+            }
+
             public Builder patch(boolean enable) {
                 config.patch = enable;
                 return this;
@@ -137,6 +154,10 @@ public class Boilerplate {
 
     public static Application getInstance() {
         return instance;
+    }
+
+    public static boolean isInLeakCanaryAnalyzerProcess(Application application) {
+        return LeakCanary.isInAnalyzerProcess(application);
     }
 
     public static PatchManager getPatchManager() {
