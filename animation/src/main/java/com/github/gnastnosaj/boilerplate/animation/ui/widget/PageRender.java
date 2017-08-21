@@ -1,4 +1,4 @@
-package com.github.gnastnosaj.boilerplate.ui.widget;
+package com.github.gnastnosaj.boilerplate.animation.ui.widget;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

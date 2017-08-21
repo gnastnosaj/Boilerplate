@@ -1,1 +1,1 @@
-include ':boilerplate', ':boilerplate-sample'
+include ':boilerplate', ':boilerplate-sample', ':animation'

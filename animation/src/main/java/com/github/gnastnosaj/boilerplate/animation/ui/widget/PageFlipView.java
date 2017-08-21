@@ -1,4 +1,4 @@
-package com.github.gnastnosaj.boilerplate.ui.widget;
+package com.github.gnastnosaj.boilerplate.animation.ui.widget;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
