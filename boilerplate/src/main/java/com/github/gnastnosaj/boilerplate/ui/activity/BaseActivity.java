@@ -128,6 +128,10 @@ public class BaseActivity extends RxAppCompatActivity {
         initSystemBar(R.color.colorPrimaryDark);
     }
 
+    protected void translucentStatusBar() {
+        StatusBarCompat.setLightStatusBar(getWindow(), true);
+    }
+
     protected DynamicBox createDynamicBox(View targetView, String[] tags, String switcherTransition) {
         DynamicBox dynamicBox = createDynamicBox(this, targetView, tags, switcherTransition);
         dynamicBoxes.add(dynamicBox);
