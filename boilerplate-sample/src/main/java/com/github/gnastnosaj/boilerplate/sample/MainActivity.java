@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ViewFlipper;
 
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
-import com.github.gnastnosaj.boilerplate.ui.widget.PageFlipView;
+import com.github.gnastnosaj.boilerplate.animation.ui.widget.PageFlipView;
 
 /**
  * Created by jasontsang on 4/21/17.
