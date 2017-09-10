@@ -3,8 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Boilerplate.iml" filepath="$PROJECT_DIR$/Boilerplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Boilerplate.iml" filepath="$PROJECT_DIR$/Boilerplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/animation/animation.iml" filepath="$PROJECT_DIR$/animation/animation.iml" />
       <module fileurl="file://$PROJECT_DIR$/animation/animation.iml" filepath="$PROJECT_DIR$/animation/animation.iml" />
       <module fileurl="file://$PROJECT_DIR$/boilerplate/boilerplate.iml" filepath="$PROJECT_DIR$/boilerplate/boilerplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boilerplate/boilerplate.iml" filepath="$PROJECT_DIR$/boilerplate/boilerplate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/boilerplate-sample/boilerplate-sample.iml" filepath="$PROJECT_DIR$/boilerplate-sample/boilerplate-sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/boilerplate-sample/boilerplate-sample.iml" filepath="$PROJECT_DIR$/boilerplate-sample/boilerplate-sample.iml" />
     </modules>
   </component>

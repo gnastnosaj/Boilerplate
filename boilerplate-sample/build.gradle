@@ -24,7 +24,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':boilerplate')
+    debugCompile project(path: ':boilerplate', configuration: 'debug')
+    releaseCompile project(path: ':boilerplate', configuration: 'release')
     compile project(':animation')
 }
 
