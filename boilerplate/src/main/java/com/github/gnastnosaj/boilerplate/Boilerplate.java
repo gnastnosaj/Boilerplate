@@ -11,6 +11,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
+import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
 import com.wanjian.cockroach.Cockroach;
@@ -79,7 +80,7 @@ public class Boilerplate {
         }
 
         if (config.mvc) {
-            MVCHelper.setLoadViewFractory(new LoadViewFactory());
+            MVCHelper.setLoadViewFractory(config.loadViewFactory);
         }
     }
 
@@ -95,6 +96,7 @@ public class Boilerplate {
         private DraweeConfig draweeConfig;
 
         private boolean mvc = true;
+        private ILoadViewFactory loadViewFactory = new LoadViewFactory();
 
         private Config() {
         }
@@ -143,6 +145,11 @@ public class Boilerplate {
 
             public Builder mvc(boolean enable) {
                 config.mvc = enable;
+                return this;
+            }
+
+            public Builder mvc(ILoadViewFactory loadViewFactory) {
+                config.loadViewFactory = loadViewFactory;
                 return this;
             }
 
