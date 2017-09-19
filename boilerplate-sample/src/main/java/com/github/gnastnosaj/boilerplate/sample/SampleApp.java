@@ -1,6 +1,7 @@
 package com.github.gnastnosaj.boilerplate.sample;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.github.gnastnosaj.boilerplate.Boilerplate;
 
@@ -12,9 +13,12 @@ public class SampleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (Boilerplate.isInLeakCanaryAnalyzerProcess(this)) {
-            return;
-        }
         Boilerplate.initialize(this, new Boilerplate.Config.Builder().leakCanary(true).build());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        Boilerplate.runtime(false);
     }
 }

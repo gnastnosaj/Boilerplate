@@ -30,6 +30,9 @@ public class Boilerplate {
     private static Application instance;
     private static PatchManager patchManager;
 
+    private static boolean initialized = false;
+    private static boolean runtime = true;
+
     public static void initialize(Application application) {
         initialize(application, new Config());
     }
@@ -46,9 +49,18 @@ public class Boilerplate {
     }
 
     public static void initialize(Application application, Config config) {
+        if (initialized) return;
+
+        initialized = true;
+
         instance = application;
 
         DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+
+        if (DEBUG && config.leakCanary) {
+            if (LeakCanary.isInAnalyzerProcess(application)) return;
+            LeakCanary.install(application);
+        }
 
         if (config.log) {
             CrashReportingTree.initialize(application);
@@ -61,18 +73,14 @@ public class Boilerplate {
             Timber.e(e, "Boilerplateh initialize Exception");
         }
 
-        if (DEBUG && config.leakCanary) {
-            LeakCanary.install(application);
-        }
-
-        if (!DEBUG && config.cockroach) {
-            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
-        }
-
         if (config.patch) {
             patchManager = new PatchManager(application);
             patchManager.init(versionName);
             patchManager.loadPatch();
+        }
+
+        if (!DEBUG && config.cockroach) {
+            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
         }
 
         if (config.fresco) {
@@ -159,16 +167,18 @@ public class Boilerplate {
         }
     }
 
-    public static Application getInstance() {
-        return instance;
+    public static void runtime(Boolean enable) {
+        runtime = enable;
     }
 
-    public static boolean isInLeakCanaryAnalyzerProcess(Application application) {
-        if (DEBUG) {
-            return LeakCanary.isInAnalyzerProcess(application);
-        } else {
-            return false;
+    public static void runtime(Application application) {
+        if (runtime) {
+            initialize(application);
         }
+    }
+
+    public static Application getInstance() {
+        return instance;
     }
 
     public static PatchManager getPatchManager() {
