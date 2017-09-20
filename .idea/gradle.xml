@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/animation" />
             <option value="$PROJECT_DIR$/boilerplate" />
             <option value="$PROJECT_DIR$/boilerplate-sample" />
+            <option value="$PROJECT_DIR$/conceal" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

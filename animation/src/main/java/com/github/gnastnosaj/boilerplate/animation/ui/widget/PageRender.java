@@ -17,6 +17,7 @@ import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 public class PageRender implements OnPageFlipListener {
 
@@ -57,36 +58,40 @@ public class PageRender implements OnPageFlipListener {
     }
 
     public void onDrawFrame() {
-
         mPageFlip.deleteUnusedTextures();
         Page page = mPageFlip.getFirstPage();
 
         if (mDrawCommand == DRAW_MOVING_FRAME || mDrawCommand == DRAW_ANIMATING_FRAME) {
-            CountDownLatch countDownLatch = new CountDownLatch(1);
             if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
                 if (!page.isSecondTextureSet()) {
+                    CountDownLatch countDownLatch = new CountDownLatch(1);
                     Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
                         viewFlipper.showNext();
                         countDownLatch.countDown();
                     });
                     try {
                         countDownLatch.await();
+                        drawPage();
+                        page.setSecondTexture(mBitmap);
                     } catch (Exception e) {
+                        Timber.e(e);
                     }
-                    drawPage();
-                    page.setSecondTexture(mBitmap);
                 }
-            } else if (!page.isFirstTextureSet()) {
-                Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
-                    viewFlipper.showPrevious();
-                    countDownLatch.countDown();
-                });
-                try {
-                    countDownLatch.await();
-                } catch (Exception e) {
+            } else if (mPageFlip.getFlipState() == PageFlipState.BACKWARD_FLIP) {
+                if (!page.isFirstTextureSet()) {
+                    CountDownLatch countDownLatch = new CountDownLatch(1);
+                    Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
+                        viewFlipper.showPrevious();
+                        countDownLatch.countDown();
+                    });
+                    try {
+                        countDownLatch.await();
+                        drawPage();
+                        page.setFirstTexture(mBitmap);
+                    } catch (Exception e) {
+                        Timber.e(e);
+                    }
                 }
-                drawPage();
-                page.setFirstTexture(mBitmap);
             }
             mPageFlip.drawFlipFrame();
         } else if (mDrawCommand == DRAW_FULL_PAGE) {
@@ -137,12 +142,15 @@ public class PageRender implements OnPageFlipListener {
         return false;
     }
 
+    @Override
     public boolean canFlipForward() {
         return true;
     }
 
+    @Override
     public boolean canFlipBackward() {
-        return false;
+        mPageFlip.getFirstPage().setSecondTextureWithFirst();
+        return true;
     }
 
     private void drawPage() {

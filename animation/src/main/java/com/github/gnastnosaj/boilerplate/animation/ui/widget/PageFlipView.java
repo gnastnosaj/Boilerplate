@@ -29,7 +29,27 @@ public class PageFlipView extends GLSurfaceView implements Renderer {
     public PageFlipView(Context context, ViewFlipper viewFlipper) {
         super(context);
 
-        newHandler();
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case PageRender.MSG_ENDED_DRAWING_FRAME:
+                        try {
+                            mDrawLock.lock();
+
+                            if (mPageRender != null && mPageRender.onEndedDrawing(msg.arg1)) {
+                                requestRender();
+                            }
+                        } finally {
+                            mDrawLock.unlock();
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        };
 
         mPageFlip = new PageFlip(context);
         mPageFlip.setShadowWidthOfFoldEdges(5, 60, 0.3f)
@@ -108,7 +128,7 @@ public class PageFlipView extends GLSurfaceView implements Renderer {
 
             mPageRender.onSurfaceChanged(width, height);
         } catch (PageFlipException e) {
-            Timber.e("Failed to run PageFlipFlipRender:onSurfaceChanged");
+            Timber.e(e);
         }
     }
 
@@ -117,30 +137,7 @@ public class PageFlipView extends GLSurfaceView implements Renderer {
         try {
             mPageFlip.onSurfaceCreated();
         } catch (PageFlipException e) {
-            Timber.e("Failed to run PageFlipFlipRender:onSurfaceCreated");
+            Timber.e(e);
         }
-    }
-
-    private void newHandler() {
-        mHandler = new Handler() {
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case PageRender.MSG_ENDED_DRAWING_FRAME:
-                        try {
-                            mDrawLock.lock();
-
-                            if (mPageRender != null && mPageRender.onEndedDrawing(msg.arg1)) {
-                                requestRender();
-                            }
-                        } finally {
-                            mDrawLock.unlock();
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        };
     }
 }

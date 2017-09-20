@@ -1,18 +1,14 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    buildToolsVersion "26.0.1"
 
     defaultConfig {
-        applicationId "com.github.gnastnosaj.boilerplate.sample"
         minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName "1.0.0"
-    }
-    lintOptions {
-        checkReleaseBuilds false
     }
     buildTypes {
         release {
@@ -23,11 +19,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    debugCompile project(path: ':boilerplate', configuration: 'debug')
-    releaseCompile project(path: ':boilerplate', configuration: 'release')
-    compile project(':animation')
-    compile project(':conceal')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided project(':boilerplate')
+    compile 'com.android.support:appcompat-v7:26.+'
 }
 
 configurations.all {
