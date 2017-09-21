@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ViewFlipper;
 
-import com.github.gnastnosaj.boilerplate.conceal.service.Conceal;
+import com.github.gnastnosaj.boilerplate.conceal.Conceal;
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
 import com.github.gnastnosaj.boilerplate.animation.ui.widget.PageFlipView;
 

@@ -1,4 +1,4 @@
-package com.github.gnastnosaj.boilerplate.conceal.service;
+package com.github.gnastnosaj.boilerplate.conceal;
 
 import android.app.ActivityManager;
 import android.app.Service;
@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
+
+import com.github.gnastnosaj.boilerplate.conceal.service.ConcealService;
 
 import java.util.List;
 
