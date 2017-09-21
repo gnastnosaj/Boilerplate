@@ -17,6 +17,10 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".SampleService"
+            android:process=":sample" />
     </application>
 
 </manifest>

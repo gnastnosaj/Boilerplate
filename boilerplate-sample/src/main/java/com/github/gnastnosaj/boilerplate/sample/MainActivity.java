@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ViewFlipper;
 
+import com.github.gnastnosaj.boilerplate.conceal.service.Conceal;
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
 import com.github.gnastnosaj.boilerplate.animation.ui.widget.PageFlipView;
 
@@ -41,6 +42,8 @@ public class MainActivity extends BaseActivity {
                 return true;
             }
         });
+
+        Conceal.conceal(this, SampleService.class);
     }
 
     @Override
