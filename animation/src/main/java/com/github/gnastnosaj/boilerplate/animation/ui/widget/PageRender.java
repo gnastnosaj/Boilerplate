@@ -33,6 +33,7 @@ public class PageRender implements OnPageFlipListener {
     private Handler mHandler;
     private PageFlip mPageFlip;
     private ViewFlipper mViewFlipper;
+    private PageFlipState mLastState;
 
     public PageRender(PageFlip pageFlip, Handler handler, ViewFlipper viewFlipper) {
         mPageFlip = pageFlip;
@@ -63,7 +64,7 @@ public class PageRender implements OnPageFlipListener {
 
         if (mDrawCommand == DRAW_MOVING_FRAME || mDrawCommand == DRAW_ANIMATING_FRAME) {
             if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
-                if (!page.isSecondTextureSet()) {
+                if (!page.isSecondTextureSet() || mLastState == PageFlipState.BACKWARD_FLIP) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
                         viewFlipper.showNext();
@@ -71,12 +72,15 @@ public class PageRender implements OnPageFlipListener {
                     });
                     try {
                         countDownLatch.await();
-                        drawPage();
-                        page.setSecondTexture(mBitmap);
+                        if (!page.isSecondTextureSet()) {
+                            drawPage();
+                            page.setSecondTexture(mBitmap);
+                        }
                     } catch (Exception e) {
                         Timber.e(e);
                     }
                 }
+                mLastState = PageFlipState.FORWARD_FLIP;
             } else if (mPageFlip.getFlipState() == PageFlipState.BACKWARD_FLIP) {
                 if (!page.isFirstTextureSet()) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -92,6 +96,7 @@ public class PageRender implements OnPageFlipListener {
                         Timber.e(e);
                     }
                 }
+                mLastState = PageFlipState.BACKWARD_FLIP;
             }
             mPageFlip.drawFlipFrame();
         } else if (mDrawCommand == DRAW_FULL_PAGE) {
