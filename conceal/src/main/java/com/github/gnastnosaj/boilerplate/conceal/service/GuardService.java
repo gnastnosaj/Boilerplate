@@ -22,6 +22,8 @@ public class GuardService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Timber.d("onCreate");
+
         concealServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName componentName, IBinder iBinder) {

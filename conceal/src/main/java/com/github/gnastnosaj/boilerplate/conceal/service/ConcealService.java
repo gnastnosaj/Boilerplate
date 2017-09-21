@@ -10,7 +10,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.support.annotation.Nullable;
 
 import com.github.gnastnosaj.boilerplate.Boilerplate;
@@ -26,9 +25,7 @@ import static android.content.pm.PackageManager.GET_SERVICES;
  */
 
 public class ConcealService extends Service {
-    public final static String TAG = "ConcealService";
 
-    private PowerManager.WakeLock wakeLock;
     private ServiceConnection guardServiceConnection;
 
     @Override
@@ -38,9 +35,6 @@ public class ConcealService extends Service {
         Boilerplate.initialize(getApplication(), new Boilerplate.Config.Builder().patch(false).fresco(false).mvc(false).build());
 
         Timber.d("onCreate");
-
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
 
         guardServiceConnection = new ServiceConnection() {
             @Override
@@ -64,14 +58,12 @@ public class ConcealService extends Service {
 
         bindService(new Intent(this, GuardService.class), guardServiceConnection, Context.BIND_IMPORTANT);
 
-        wakeLock.acquire();
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        wakeLock.release();
     }
 
     @Nullable
