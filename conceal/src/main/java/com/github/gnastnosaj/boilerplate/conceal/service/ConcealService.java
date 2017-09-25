@@ -59,10 +59,13 @@ public class ConcealService extends Service {
 
         bindService(new Intent(this, GuardService.class), guardServiceConnection, Context.BIND_IMPORTANT);
 
-        Class<? extends Service> serviceClass = (Class<? extends Service>) intent.getSerializableExtra(EXTRA_SERVICE_CLASS);
-        if (serviceClass != null) {
-            serviceClasses.add(serviceClass);
+        if (intent != null) {
+            Class<? extends Service> serviceClass = (Class<? extends Service>) intent.getSerializableExtra(EXTRA_SERVICE_CLASS);
+            if (serviceClass != null) {
+                serviceClasses.add(serviceClass);
+            }
         }
+
         for (Class<? extends Service> service : serviceClasses) {
             startService(new Intent(ConcealService.this, service));
         }
