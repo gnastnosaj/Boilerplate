@@ -21,28 +21,23 @@ public class SoundUtil {
     public static void initialize(Context context, String... soundKeys) {
         SoundUtil.context = context;
 
-        List<Integer> soundResources = new ArrayList<>();
-
-        for (String soundKey : soundKeys) {
-            int soundResource = context.getResources().getIdentifier("sfx_" + soundKey, "raw", context.getPackageName());
-
-            soundResources.add(soundResource);
-            soundMap.put(soundKey, soundResource);
-        }
-
-        HXSound.load(soundResources, context);
+        add(soundKeys);
     }
 
     public static void add(String... soundKeys) {
-        List<Integer> soundResources = new ArrayList<>();
+        if (soundKeys != null && soundKeys.length > 0) {
+            
+            List<Integer> soundResources = new ArrayList<>();
 
-        for (String soundKey : soundKeys) {
-            int soundResource = context.getResources().getIdentifier("sfx_" + soundKey, "raw", context.getPackageName());
+            for (String soundKey : soundKeys) {
+                int soundResource = context.getResources().getIdentifier("sfx_" + soundKey, "raw", context.getPackageName());
 
-            soundResources.add(soundResource);
+                soundResources.add(soundResource);
+                soundMap.put(soundKey, soundResource);
+            }
+
+            HXSound.load(soundResources, context);
         }
-
-        HXSound.load(soundResources, context);
     }
 
     public static void play(String soundKey) {
