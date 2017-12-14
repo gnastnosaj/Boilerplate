@@ -95,7 +95,7 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
                 if (isTouchView(hideSoftByEditViewIds(), ev))
                     return super.dispatchTouchEvent(ev);
                 //隐藏键盘
-                KeyBoardUtils.hideInputForce(this);
+                KeyBoardUtil.hideInputForce(this);
                 clearViewFocus(v, hideSoftByEditViewIds());
 
             }

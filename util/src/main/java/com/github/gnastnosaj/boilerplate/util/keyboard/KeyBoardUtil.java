@@ -13,7 +13,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 //打开或关闭软键盘
-public class KeyBoardUtils {
+public class KeyBoardUtil {
     /**
      * 打开软键盘
      * 魅族可能会有问题

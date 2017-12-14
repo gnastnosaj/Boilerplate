@@ -21,6 +21,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     provided project(':boilerplate')
+
+    compile 'com.github.huhx0015:HXAudioPlayer:v3.2.7'
 }
 
 configurations.all {
