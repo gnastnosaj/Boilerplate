@@ -27,7 +27,8 @@ import timber.log.Timber;
 public class PushService extends Service {
     public final static String EXTRA_COMMAND = "command";
 
-    public final static int COMMAND_TICK = 0;
+    public final static int COMMAND_RESET = 0;
+    public final static int COMMAND_TICK = 1;
 
     private PowerManager.WakeLock wakeLock;
 
@@ -52,10 +53,14 @@ public class PushService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
-            int command = intent.getIntExtra(EXTRA_COMMAND, -1);
+            int command = intent.getIntExtra(EXTRA_COMMAND, COMMAND_RESET);
             switch (command) {
                 case COMMAND_TICK:
                     acquireWakeLock();
+                    break;
+                case COMMAND_RESET:
+                    acquireWakeLock();
+                    resetClient();
                     break;
             }
         } else {
