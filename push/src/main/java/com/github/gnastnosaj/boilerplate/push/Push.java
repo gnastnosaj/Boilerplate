@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import com.github.gnastnosaj.boilerplate.conceal.Conceal;
 import com.github.gnastnosaj.boilerplate.push.service.PushService;
-import com.parse.Parse;
 
 import timber.log.Timber;
 
@@ -42,8 +41,6 @@ public class Push {
             Push.context = context;
 
             cache(uuid, serverIP, serverPort, pushPort);
-
-            Parse.initialize(context, context.getResources().getString(R.string.boilerplate_push_application_id), context.getResources().getString(R.string.boilerplate_push_client_key));
 
             Conceal.conceal(context, PushService.class);
 
