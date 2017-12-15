@@ -6,6 +6,14 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application>
+        <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="@string/parse_server_url" />
+
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="@string/parse_app_id" />
+
         <service
             android:name=".service.PushService"
             android:process=":push" />
@@ -29,6 +37,14 @@
         <receiver android:name=".receiver.PushBroadcastReceiver">
             <intent-filter>
                 <action android:name="com.github.gnastnosaj.boilerplate.push" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name="com.parse.ParsePushBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.parse.push.intent.RECEIVE" />
+                <action android:name="com.parse.push.intent.DELETE" />
+                <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
         </receiver>
 

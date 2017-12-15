@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="parse_server_url">http://localhost:1337/parse/</string>
+    <string name="parse_app_id">com.github.gnastnosaj.boilerplate.push</string>
+</resources>

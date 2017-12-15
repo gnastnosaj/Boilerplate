@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.github.gnastnosaj.boilerplate.conceal.Conceal;
 import com.github.gnastnosaj.boilerplate.push.service.PushService;
+import com.parse.Parse;
 
 import timber.log.Timber;
 
@@ -35,6 +36,7 @@ public class Push {
 
     public static synchronized void initialize(Context context, String uuid, String serverIP, String serverPort) {
         if (!initialized) {
+            Parse.initialize(context);
 
             Push.context = context;
 
