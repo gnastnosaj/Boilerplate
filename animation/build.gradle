@@ -1,13 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0.0"
     }
@@ -24,18 +23,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    provided project(':boilerplate')
-    compile 'com.github.eschao:android-PageFlip:+'
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '26.0.0-alpha1'
-            }
-        }
-    }
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':boilerplate')
+    implementation 'com.github.eschao:android-PageFlip:+'
 }

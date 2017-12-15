@@ -1,14 +1,12 @@
 apply plugin: 'com.android.library'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.0'
-    publishNonDefault true
+    compileSdkVersion 27
+    buildToolsVersion "27.0.2"
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0.0"
     }
@@ -25,60 +23,49 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:recyclerview-v7:26.+'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    api 'com.android.support:appcompat-v7:+'
+    api 'com.android.support:recyclerview-v7:+'
 
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
-    compile 'com.wanjian:cockroach:+'
-    compile 'com.alipay.euler:andfix:+'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.2'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
+    api 'com.wanjian:cockroach:+'
+    api 'com.alipay.euler:andfix:+'
 
-    compile 'com.jakewharton.timber:timber:+'
-    compile 'com.jiongbull:jlog:+'
+    api 'com.jakewharton.timber:timber:+'
+    implementation 'com.jiongbull:jlog:+'
 
-    compile 'io.reactivex.rxjava2:rxjava:+'
-    compile 'io.reactivex.rxjava2:rxandroid:+'
+    api 'io.reactivex.rxjava2:rxjava:+'
+    api 'io.reactivex.rxjava2:rxandroid:+'
 
-    compile 'com.tbruyelle.rxpermissions2:rxpermissions:+'
-    compile 'zlc.season:rxdownload2:+'
-    compile 'com.jakewharton.rxbinding2:rxbinding:+'
-    compile 'com.trello.rxlifecycle2:rxlifecycle:+'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-android:+'
-    compile 'com.trello.rxlifecycle2:rxlifecycle-components:+'
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:+'
+    api 'zlc.season:rxdownload2:+'
+    api 'com.jakewharton.rxbinding2:rxbinding:+'
+    api 'com.trello.rxlifecycle2:rxlifecycle:+'
+    api 'com.trello.rxlifecycle2:rxlifecycle-android:+'
+    api 'com.trello.rxlifecycle2:rxlifecycle-components:+'
 
-    compile 'com.squareup.retrofit2:retrofit:+'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:+'
-    compile 'com.squareup.okhttp3:okhttp:+'
+    api 'com.squareup.retrofit2:retrofit:+'
+    api 'com.squareup.retrofit2:adapter-rxjava2:+'
+    api 'com.squareup.okhttp3:okhttp:+'
 
-    compile 'com.facebook.fresco:fresco:+'
-    compile 'com.facebook.fresco:animated-gif:+'
-    compile 'com.facebook.fresco:animated-webp:+'
-    compile 'com.facebook.fresco:webpsupport:+'
-    compile 'com.facebook.fresco:imagepipeline-okhttp3:+'
+    api 'com.facebook.fresco:fresco:+'
+    api 'com.facebook.fresco:animated-gif:+'
+    api 'com.facebook.fresco:animated-webp:+'
+    api 'com.facebook.fresco:webpsupport:+'
+    api 'com.facebook.fresco:imagepipeline-okhttp3:+'
 
-    compile 'com.shizhefei:MVCHelper-Library:+'
-    compile 'com.shizhefei:MVCHelper-SwipeRefresh:+'
-    compile('me.drakeet.multitype:multitype:+') {
+    api 'com.shizhefei:MVCHelper-Library:+'
+    api 'com.shizhefei:MVCHelper-SwipeRefresh:+'
+    api('me.drakeet.multitype:multitype:+') {
         exclude group: 'com.android.support'
     }
 
-    compile 'com.mikepenz:iconics-core:+'
-    compile 'net.qiujuer.genius:res:+'
-    compile 'com.githang:status-bar-compat:+'
-    compile 'com.github.gnastnosaj:Dynamicbox:17cd556'
-    compile 'com.wang.avi:library:+'
-    compile 'com.tuyenmonkey:mkloader:+'
-    compile 'com.airbnb.android:lottie:+'
-}
-
-configurations.all {
-    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-        def requested = details.requested
-        if (requested.group == 'com.android.support') {
-            if (!requested.name.startsWith("multidex")) {
-                details.useVersion '26.0.0-alpha1'
-            }
-        }
-    }
+    api 'com.mikepenz:iconics-core:+'
+    api 'net.qiujuer.genius:res:+'
+    api 'com.githang:status-bar-compat:+'
+    api 'com.github.gnastnosaj:Dynamicbox:17cd556'
+    implementation 'com.wang.avi:library:+'
+    implementation 'com.tuyenmonkey:mkloader:+'
+    api 'com.airbnb.android:lottie:+'
 }

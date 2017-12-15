@@ -1,16 +1,15 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 27
     buildToolsVersion "27.0.2"
-
     defaultConfig {
-        applicationId "com.github.gnastnosaj.boilerplate.sample"
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
         versionName "1.0.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,8 +23,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':boilerplate')
-    implementation project(':animation')
     implementation project(':conceal')
+
+    implementation 'com.parse:parse-android:+'
+    implementation 'com.infstory:json2notification:+'
+    api 'com.jcmore2.freeview:freeview:+'
 }

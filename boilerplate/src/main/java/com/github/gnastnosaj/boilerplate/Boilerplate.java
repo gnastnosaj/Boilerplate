@@ -48,10 +48,8 @@ public class Boilerplate {
         initialize(application, new Config.Builder().setImagePipelineConfig(imagePipelineConfig).setDraweeConfig(draweeConfig).build());
     }
 
-    public static void initialize(Application application, Config config) {
+    public static synchronized void initialize(Application application, Config config) {
         if (initialized) return;
-
-        initialized = true;
 
         instance = application;
 
@@ -90,6 +88,8 @@ public class Boilerplate {
         if (config.mvc) {
             MVCHelper.setLoadViewFractory(config.loadViewFactory);
         }
+
+        initialized = true;
     }
 
     public static class Config {
