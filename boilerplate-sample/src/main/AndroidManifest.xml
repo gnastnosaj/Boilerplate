@@ -21,6 +21,12 @@
         <service
             android:name=".SampleService"
             android:process=":sample" />
+
+        <receiver android:name="com.github.gnastnosaj.boilerplate.push.receiver.DefaultPushBroadcastReceiver">
+            <intent-filter>
+                <action android:name="@string/push_receiver_action" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

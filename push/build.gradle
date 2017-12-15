@@ -24,10 +24,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':boilerplate')
-    implementation project(':conceal')
+    provided project(':boilerplate')
+    provided project(':conceal')
 
     implementation 'com.parse:parse-android:+'
     implementation 'com.infstory:json2notification:+'
-    api 'com.jcmore2.freeview:freeview:+'
+    implementation 'com.github.gnastnosaj:FreeView:f795c5d'
+    implementation 'com.github.AlbertGrobas:PolygonImageView:e4eb84acd9'
+    implementation 'q.rorbin:badgeview:+'
 }

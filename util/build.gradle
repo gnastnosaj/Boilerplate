@@ -19,7 +19,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':boilerplate')
+    provided project(':boilerplate')
 
     api 'com.github.huhx0015:HXAudioPlayer:v3.2.7'
 }

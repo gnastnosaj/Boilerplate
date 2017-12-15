@@ -14,7 +14,6 @@ import timber.log.Timber;
  */
 
 public class Push {
-
     public final static String DEFAULT_PRE_NAME = "defaultAccount";
     public final static String UUID = "uuid";
     public final static String SERVER_IP = "serverIp";

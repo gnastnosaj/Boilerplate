@@ -27,8 +27,7 @@ dependencies {
     api 'com.android.support:appcompat-v7:+'
     api 'com.android.support:recyclerview-v7:+'
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.2'
+    provided 'com.squareup.leakcanary:leakcanary-android:+'
     api 'com.wanjian:cockroach:+'
     api 'com.alipay.euler:andfix:+'
 

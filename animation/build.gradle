@@ -24,6 +24,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation project(':boilerplate')
+    provided project(':boilerplate')
     implementation 'com.github.eschao:android-PageFlip:+'
 }
