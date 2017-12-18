@@ -29,6 +29,7 @@ public class DefaultPushBroadcastReceiver extends ParsePushBroadcastReceiver {
             switch (activityLifecycleEvent.getType()) {
                 case ActivityLifecycleEvent.onActivityStarted:
                     FreeView.get().dismissFreeView();
+                    count = 0;
                     break;
             }
         }, throwable -> Timber.e(throwable));
