@@ -51,6 +51,7 @@ dependencies {
     api 'com.facebook.fresco:fresco:+'
     api 'com.facebook.fresco:imagepipeline:+'
     api 'com.facebook.fresco:imagepipeline-okhttp3:+'
+    api 'com.facebook.fresco:drawee:+'
     api 'com.facebook.fresco:animated-gif:+'
 
     api 'com.shizhefei:MVCHelper-Library:+'
