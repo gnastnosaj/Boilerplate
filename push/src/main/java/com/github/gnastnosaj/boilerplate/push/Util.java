@@ -1,13 +1,10 @@
 package com.github.gnastnosaj.boilerplate.push;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import java.security.MessageDigest;
-import java.util.List;
-
 /**
  * Created by jasontsang on 12/15/17.
  */
@@ -66,16 +63,5 @@ public class Util {
             return true;
         }
         return false;
-    }
-
-    public static boolean isBackground(Context context) {
-        ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcessInfos = activityManager.getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo appProcessInfo : appProcessInfos) {
-            if (appProcessInfo.processName.equals(context.getPackageName())) {
-                return false;
-            }
-        }
-        return true;
     }
 }

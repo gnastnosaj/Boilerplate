@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.github.gnastnosaj.boilerplate.Boilerplate;
 import com.github.gnastnosaj.boilerplate.push.R;
-import com.github.gnastnosaj.boilerplate.push.Util;
 import com.jcmore2.freeview.FreeView;
 import com.parse.ParsePushBroadcastReceiver;
 
@@ -44,7 +44,7 @@ public class DefaultPushBroadcastReceiver extends ParsePushBroadcastReceiver {
     }
 
     private void showFreeView() {
-        if (Util.isBackground(context)) {
+        if (Boilerplate.isInBackground()) {
             if (count > 0) {
                 FreeView.get().dismissFreeView();
             }

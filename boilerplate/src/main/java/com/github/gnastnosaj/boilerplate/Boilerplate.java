@@ -1,8 +1,10 @@
 package com.github.gnastnosaj.boilerplate;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.alipay.euler.andfix.patch.PatchManager;
@@ -23,15 +25,16 @@ import timber.log.Timber;
  */
 
 public class Boilerplate {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG;
     public static String versionName;
     public static int versionCode;
 
     private static Application instance;
     private static PatchManager patchManager;
 
-    private static boolean initialized = false;
     private static boolean runtime = true;
+    private static boolean initialized;
+    private static boolean inBackground;
 
     public static void initialize(Application application) {
         initialize(application, new Config());
@@ -78,7 +81,7 @@ public class Boilerplate {
         }
 
         if (!DEBUG && config.cockroach) {
-            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException", thread));
+            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException"));
         }
 
         if (config.fresco) {
@@ -88,6 +91,45 @@ public class Boilerplate {
         if (config.mvc) {
             MVCHelper.setLoadViewFractory(config.loadViewFactory);
         }
+
+        application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle bundle) {
+                Timber.d("onActivityCreated:%s", activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+                Timber.d("onActivityStarted:%s", activity);
+                inBackground = false;
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+                Timber.d("onActivityResumed:%s", activity);
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+                Timber.d("onActivityPaused:%s", activity);
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+                Timber.d("onActivityStopped:%s", activity);
+                inBackground = true;
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+                Timber.d("onActivitySaveInstanceState:%s", activity);
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                Timber.d("onActivityDestroyed:%s", activity);
+            }
+        });
 
         initialized = true;
     }
@@ -167,6 +209,14 @@ public class Boilerplate {
         }
     }
 
+    public static Application getInstance() {
+        return instance;
+    }
+
+    public static PatchManager getPatchManager() {
+        return patchManager;
+    }
+
     public static void runtime(Boolean enable) {
         runtime = enable;
     }
@@ -177,11 +227,7 @@ public class Boilerplate {
         }
     }
 
-    public static Application getInstance() {
-        return instance;
-    }
-
-    public static PatchManager getPatchManager() {
-        return patchManager;
+    public static boolean isInBackground() {
+        return inBackground;
     }
 }
