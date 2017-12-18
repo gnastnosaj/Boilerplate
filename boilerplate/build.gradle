@@ -49,10 +49,9 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:+'
 
     api 'com.facebook.fresco:fresco:+'
-    api 'com.facebook.fresco:animated-gif:+'
-    api 'com.facebook.fresco:animated-webp:+'
-    api 'com.facebook.fresco:webpsupport:+'
+    api 'com.facebook.fresco:imagepipeline:+'
     api 'com.facebook.fresco:imagepipeline-okhttp3:+'
+    api 'com.facebook.fresco:animated-gif:+'
 
     api 'com.shizhefei:MVCHelper-Library:+'
     api 'com.shizhefei:MVCHelper-SwipeRefresh:+'
