@@ -11,8 +11,10 @@ import com.alipay.euler.andfix.patch.PatchManager;
 import com.facebook.drawee.backends.pipeline.DraweeConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
 import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
+import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
 import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
@@ -96,38 +98,45 @@ public class Boilerplate {
             @Override
             public void onActivityCreated(Activity activity, Bundle bundle) {
                 Timber.d("onActivityCreated:%s", activity);
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityCreated, activity, bundle));
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
                 Timber.d("onActivityStarted:%s", activity);
                 inBackground = false;
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityStarted, activity, null));
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
                 Timber.d("onActivityResumed:%s", activity);
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityResumed, activity, null));
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
                 Timber.d("onActivityPaused:%s", activity);
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityPaused, activity, null));
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
                 Timber.d("onActivityStopped:%s", activity);
                 inBackground = true;
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityStopped, activity, null));
             }
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
                 Timber.d("onActivitySaveInstanceState:%s", activity);
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivitySaveInstanceState, activity, bundle));
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
                 Timber.d("onActivityDestroyed:%s", activity);
+                RxBus.getInstance().post(ActivityLifecycleEvent.class, new ActivityLifecycleEvent(ActivityLifecycleEvent.onActivityDestroyed, activity, null));
             }
         });
 

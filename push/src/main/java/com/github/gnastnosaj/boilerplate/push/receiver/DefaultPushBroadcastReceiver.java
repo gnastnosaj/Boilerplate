@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.github.gnastnosaj.boilerplate.Boilerplate;
+import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
 import com.github.gnastnosaj.boilerplate.push.R;
 import com.jcmore2.freeview.FreeView;
 import com.parse.ParsePushBroadcastReceiver;
 
 import q.rorbin.badgeview.QBadgeView;
+import timber.log.Timber;
 
 /**
  * Created by jasontsang on 12/15/17.
@@ -21,6 +23,16 @@ public class DefaultPushBroadcastReceiver extends ParsePushBroadcastReceiver {
     private static int count = 0;
 
     private static FreeView.FreeViewListener freeViewListener;
+
+    static {
+        ActivityLifecycleEvent.observable.subscribe(activityLifecycleEvent -> {
+            switch (activityLifecycleEvent.getType()) {
+                case ActivityLifecycleEvent.onActivityStarted:
+                    FreeView.get().dismissFreeView();
+                    break;
+            }
+        }, throwable -> Timber.e(throwable));
+    }
 
     private Context context;
 
