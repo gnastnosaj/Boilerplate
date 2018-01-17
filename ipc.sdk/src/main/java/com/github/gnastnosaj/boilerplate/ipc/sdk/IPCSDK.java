@@ -16,8 +16,9 @@ import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.github.gnastnosaj.boilerplate.ipc.IPC;
-import com.github.gnastnosaj.boilerplate.ipc.IPCCallback;
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPC;
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
 import java.util.concurrent.CountDownLatch;
@@ -68,6 +69,11 @@ public class IPCSDK {
                 @Override
                 public void onComplete() throws RemoteException {
                     subscriber.onComplete();
+                }
+
+                @Override
+                public void onError(IPCException e) throws RemoteException {
+                    subscriber.onError(e);
                 }
             });
         }).compose(RxHelper.rxSchedulerHelper());

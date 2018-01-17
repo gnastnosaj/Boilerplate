@@ -12,6 +12,9 @@ import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPC;
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEvent;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEventBus;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddleware;
@@ -97,13 +100,13 @@ public class IPCService extends Service {
                     .compose(RxHelper.rxSchedulerHelper())
                     .subscribe(
                             count -> callback.onComplete(),
-                            throwable -> throwable.printStackTrace()
+                            throwable -> callback.onError(new IPCException(throwable))
                     );
         }
 
         @Override
         public void subscribe(IPCCallback callback) throws RemoteException {
-            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(o -> callback.onNext(o.toString()));
+            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(o -> callback.onNext(o.toString()), throwable -> callback.onError(new IPCException(throwable)));
             subscriptions.put(callback, disposable);
         }
 
@@ -114,10 +117,10 @@ public class IPCService extends Service {
 
         @Override
         public void register(String tag, IPCCallback callback) throws RemoteException {
-            Observable observable = RxBus.getInstance().register(tag, IPCEvent.class);
+            Observable<IPCEvent> observable = RxBus.getInstance().register(tag, IPCEvent.class);
             observables.put(callback, observable);
 
-            Disposable disposable = observable.subscribe(event -> callback.onNext(event.toString()));
+            Disposable disposable = observable.subscribe(event -> callback.onNext(event.toString()), throwable -> callback.onError(new IPCException(throwable)));
             subscriptions.put(callback, disposable);
         }
 
