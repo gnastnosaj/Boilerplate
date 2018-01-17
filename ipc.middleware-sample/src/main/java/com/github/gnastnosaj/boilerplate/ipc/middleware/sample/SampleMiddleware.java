@@ -5,6 +5,7 @@ import android.content.Context;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEvent;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEventBus;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddleware;
+import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddlewareCallback;
 
 /**
  * Created by jasontsang on 1/17/18.
@@ -19,13 +20,13 @@ public class SampleMiddleware implements IPCMiddleware {
     }
 
     @Override
-    public boolean accept(String command) {
-        return true;
+    public boolean accept(String scheme) {
+        return scheme.equals("com.github.gnastnosaj.boilerplate.ipc.middleware.sample");
     }
 
     @Override
-    public void exec(String command, Callback callback) {
-        callback.tick(command);
+    public void exec(String data, IPCMiddlewareCallback callback) {
+        callback.perform(data);
 
         new Thread(() -> {
             try {

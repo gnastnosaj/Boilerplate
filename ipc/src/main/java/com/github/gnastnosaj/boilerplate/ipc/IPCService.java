@@ -79,24 +79,24 @@ public class IPCService extends Service {
         }
 
         @Override
-        public void exec(String command, IPCCallback callback) throws RemoteException {
+        public void exec(String scheme, String data, IPCCallback callback) throws RemoteException {
             List<Observable<String>> observables = new ArrayList<>();
 
             for (IPCMiddleware middleware : middlewares) {
-                if (middleware.accept(command)) {
-                    observables.add(Observable.create(subscriber -> middleware.exec(command, tick -> {
+                if (middleware.accept(scheme)) {
+                    observables.add(Observable.create(subscriber -> middleware.exec(data, outcome -> {
                         try {
-                            callback.onNext(tick);
+                            callback.onNext(outcome);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
-                        subscriber.onNext(tick);
+                        subscriber.onNext(outcome);
                         subscriber.onComplete();
                     })));
                 }
             }
 
-            Observable.zip(observables, ticks -> ticks.length)
+            Observable.zip(observables, outcomes -> outcomes.length)
                     .compose(RxHelper.rxSchedulerHelper())
                     .subscribe(
                             count -> callback.onComplete(),

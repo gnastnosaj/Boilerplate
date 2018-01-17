@@ -9,11 +9,7 @@ import android.content.Context;
 public interface IPCMiddleware {
     void initialize(Context context, IPCEventBus eventBus);
 
-    boolean accept(String command);
+    boolean accept(String scheme);
 
-    void exec(String command, Callback callback);
-
-    interface Callback {
-        void tick(String tick);
-    }
+    void exec(String data, IPCMiddlewareCallback callback);
 }

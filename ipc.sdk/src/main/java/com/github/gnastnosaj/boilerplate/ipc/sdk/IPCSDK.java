@@ -56,11 +56,11 @@ public class IPCSDK {
         return instance;
     }
 
-    public Observable<String> exec(String command) {
+    public Observable<String> exec(String scheme, String data) {
         return Observable.<String>create(subscriber -> {
             ensure();
 
-            ipc.exec(command, new IPCCallback.Stub() {
+            ipc.exec(scheme, data, new IPCCallback.Stub() {
                 @Override
                 public void onNext(String next) throws RemoteException {
                     subscriber.onNext(next);
@@ -79,10 +79,10 @@ public class IPCSDK {
         }).compose(RxHelper.rxSchedulerHelper());
     }
 
-    public void exec(String command, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void exec(String scheme, String data, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
-        ipc.exec(command, callback);
+        ipc.exec(scheme, data, callback);
     }
 
     public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
