@@ -5,7 +5,6 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.ipc.sdk.IPCSDK;
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
@@ -29,7 +28,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
         Observable.just(this)
                 .subscribeOn(Schedulers.io())
                 .subscribe(ipcsdkSampleActivity -> {
-                    IPCSDK.getInstance().register("sample", new IPCCallback.Stub() {
+                    IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
                         @Override
                         public void onNext(String next) throws RemoteException {
                             Observable.just(next)
@@ -51,7 +50,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
                         }
                     });
 
-                    IPCSDK.getInstance().register("sample", new IPCCallback.Stub() {
+                    IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
                         @Override
                         public void onNext(String next) throws RemoteException {
                             Observable.just(next)

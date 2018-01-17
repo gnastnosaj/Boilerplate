@@ -25,6 +25,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
 
 /**
  * Created by jasontsang on 1/17/18.
@@ -42,6 +43,9 @@ public class IPCSDK {
 
     private static IPCSDK instance;
 
+    public static abstract class Callback extends IPCCallback.Stub {
+    }
+
     private static void initialize(Application application) {
         IPCSDK.application = application;
 
@@ -58,52 +62,40 @@ public class IPCSDK {
 
     public Observable<String> exec(String scheme, String data) {
         return Observable.<String>create(subscriber -> {
+
             ensure();
 
-            ipc.exec(scheme, data, new IPCCallback.Stub() {
-                @Override
-                public void onNext(String next) throws RemoteException {
-                    subscriber.onNext(next);
-                }
+            ipc.exec(scheme, data, new IPCRxCallback(subscriber));
 
-                @Override
-                public void onComplete() throws RemoteException {
-                    subscriber.onComplete();
-                }
-
-                @Override
-                public void onError(IPCException e) throws RemoteException {
-                    subscriber.onError(e);
-                }
-            });
         }).compose(RxHelper.rxSchedulerHelper());
     }
 
-    public void exec(String scheme, String data, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    @Deprecated
+    public void exec(String scheme, String data, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.exec(scheme, data, callback);
     }
 
-    public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void subscribe(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.subscribe(callback);
     }
 
-    public void dispose(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void dispose(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.dispose(callback);
     }
 
-    public void register(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void register(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.register(tag, callback);
     }
 
-    public void unregister(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void unregister(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.unregister(tag, callback);
@@ -184,6 +176,40 @@ public class IPCSDK {
     private final static class ServiceNotConnectedException extends Exception {
         public ServiceNotConnectedException() {
             super(application.getResources().getString(R.string.ipc_service_not_connected_exception));
+        }
+    }
+
+    private final static class IPCRxCallback extends IPCCallback.Stub {
+        private ObservableEmitter<String> emitter;
+
+        public IPCRxCallback() {
+            super();
+        }
+
+        public IPCRxCallback(ObservableEmitter<String> emitter) {
+            this();
+            this.emitter = emitter;
+        }
+
+        @Override
+        public void onNext(String next) throws RemoteException {
+            if (emitter != null) {
+                emitter.onNext(next);
+            }
+        }
+
+        @Override
+        public void onComplete() throws RemoteException {
+            if (emitter != null) {
+                emitter.onComplete();
+            }
+        }
+
+        @Override
+        public void onError(IPCException e) throws RemoteException {
+            if (emitter != null) {
+                emitter.onError(e);
+            }
         }
     }
 
