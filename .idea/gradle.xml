@@ -10,8 +10,14 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/animation" />
             <option value="$PROJECT_DIR$/boilerplate" />
-            <option value="$PROJECT_DIR$/boilerplate-sample" />
             <option value="$PROJECT_DIR$/conceal" />
+            <option value="$PROJECT_DIR$/ipc" />
+            <option value="$PROJECT_DIR$/ipc-sample" />
+            <option value="$PROJECT_DIR$/ipc.aidl" />
+            <option value="$PROJECT_DIR$/ipc.middleware" />
+            <option value="$PROJECT_DIR$/ipc.middleware-sample" />
+            <option value="$PROJECT_DIR$/ipc.sdk" />
+            <option value="$PROJECT_DIR$/ipc.sdk-sample" />
             <option value="$PROJECT_DIR$/push" />
             <option value="$PROJECT_DIR$/util" />
           </set>
