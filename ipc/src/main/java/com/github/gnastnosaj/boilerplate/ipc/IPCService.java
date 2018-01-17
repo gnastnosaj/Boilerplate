@@ -16,6 +16,7 @@ import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEvent;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEventBus;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddleware;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
+import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,18 +77,28 @@ public class IPCService extends Service {
 
         @Override
         public void exec(String command, IPCCallback callback) throws RemoteException {
+            List<Observable<String>> observables = new ArrayList<>();
+
             for (IPCMiddleware middleware : middlewares) {
                 if (middleware.accept(command)) {
-                    middleware.exec(command, tick -> {
+                    observables.add(Observable.create(subscriber -> middleware.exec(command, tick -> {
                         try {
                             callback.onNext(tick);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
-                    });
+                        subscriber.onNext(tick);
+                        subscriber.onComplete();
+                    })));
                 }
             }
-            callback.onComplete();
+
+            Observable.zip(observables, ticks -> ticks.length)
+                    .compose(RxHelper.rxSchedulerHelper())
+                    .subscribe(
+                            count -> callback.onComplete(),
+                            throwable -> throwable.printStackTrace()
+                    );
         }
 
         @Override
