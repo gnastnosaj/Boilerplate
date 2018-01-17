@@ -96,12 +96,16 @@ public class IPCService extends Service {
                 }
             }
 
-            Observable.zip(observables, outcomes -> outcomes.length)
-                    .compose(RxHelper.rxSchedulerHelper())
-                    .subscribe(
-                            count -> callback.onComplete(),
-                            throwable -> callback.onError(new IPCException(throwable))
-                    );
+            if (observables.isEmpty()) {
+                callback.onError(new IPCException(context.getResources().getString(R.string.unsupported_scheme)));
+            } else {
+                Observable.zip(observables, outcomes -> outcomes.length)
+                        .compose(RxHelper.rxSchedulerHelper())
+                        .subscribe(
+                                count -> callback.onComplete(),
+                                throwable -> callback.onError(new IPCException(throwable))
+                        );
+            }
         }
 
         @Override

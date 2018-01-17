@@ -32,6 +32,16 @@ public class IPCException extends Exception implements Parcelable {
     }
 
     @Override
+    public String getMessage() {
+        return message;
+    }
+
+    @Override
+    public synchronized Throwable getCause() {
+        return cause;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
