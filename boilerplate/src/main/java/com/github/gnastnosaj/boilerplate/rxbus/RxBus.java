@@ -35,7 +35,7 @@ public class RxBus {
 
     private final ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<>();
 
-    public <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> c) {
+    public synchronized <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> c) {
         List<Subject> subjectList = subjectMapper.get(tag);
         if (null == subjectList) {
             subjectList = new CopyOnWriteArrayList<>();
@@ -48,7 +48,7 @@ public class RxBus {
         return subject;
     }
 
-    public void unregister(@NonNull Object tag, @NonNull Observable observable) {
+    public synchronized void unregister(@NonNull Object tag, @NonNull Observable observable) {
         List<Subject> subjectList = subjectMapper.get(tag);
         if (null != subjectList) {
             subjectList.remove(observable);
