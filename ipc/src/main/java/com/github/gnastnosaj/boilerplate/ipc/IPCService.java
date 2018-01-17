@@ -151,10 +151,49 @@ public class IPCService extends Service {
         }
     }
 
+    public final static class IPCServiceProvider extends ContentProvider {
+
+        @Override
+        public boolean onCreate() {
+            getContext().getApplicationContext().startService(new Intent(getContext().getApplicationContext(), IPCService.class));
+
+            return true;
+        }
+
+        @Nullable
+        @Override
+        public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public String getType(@NonNull Uri uri) {
+            return null;
+        }
+
+        @Nullable
+        @Override
+        public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+            return null;
+        }
+
+        @Override
+        public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+            return 0;
+        }
+
+        @Override
+        public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+            return 0;
+        }
+    }
+
     public static abstract class IPCMiddlewareProvider extends ContentProvider {
         @Override
         public boolean onCreate() {
             middlewares.addAll(getIPCMiddlewares());
+
             return true;
         }
 

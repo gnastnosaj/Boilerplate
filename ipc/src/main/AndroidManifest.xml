@@ -7,6 +7,12 @@
 
     <application>
 
+        <provider
+            android:name=".IPCService$IPCServiceProvider"
+            android:authorities="${applicationId}.IPCService$IPCServiceProvider"
+            android:exported="false"
+            android:multiprocess="false" />
+
         <service
             android:name=".IPCService"
             android:exported="true"
