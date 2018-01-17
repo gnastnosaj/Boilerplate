@@ -25,53 +25,59 @@ public class IPCSDKSampleActivity extends BaseActivity {
 
         setContentView(R.layout.activity_ipc_sdk_sample);
 
-        Observable.just(this)
-                .subscribeOn(Schedulers.io())
-                .subscribe(ipcsdkSampleActivity -> {
-                    IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
-                        @Override
-                        public void onNext(String next) throws RemoteException {
-                            Observable.just(next)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(
-                                            tick -> Toast.makeText(IPCSDKSampleActivity.this, "register 1:" + tick, Toast.LENGTH_SHORT).show(),
-                                            throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                                    );
-                        }
+        Observable.create(subscriber -> {
+            IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
+                @Override
+                public void onNext(String next) throws RemoteException {
+                    Observable.just(next)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(
+                                    tick -> Toast.makeText(IPCSDKSampleActivity.this, "register 1:" + tick, Toast.LENGTH_SHORT).show(),
+                                    throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                            );
+                }
 
-                        @Override
-                        public void onComplete() throws RemoteException {
+                @Override
+                public void onComplete() throws RemoteException {
 
-                        }
+                }
 
-                        @Override
-                        public void onError(IPCException e) throws RemoteException {
+                @Override
+                public void onError(IPCException e) throws RemoteException {
 
-                        }
-                    });
+                }
+            });
 
-                    IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
-                        @Override
-                        public void onNext(String next) throws RemoteException {
-                            Observable.just(next)
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(
-                                            tick -> Toast.makeText(IPCSDKSampleActivity.this, "register 2:" + tick, Toast.LENGTH_SHORT).show(),
-                                            throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                                    );
-                        }
+            subscriber.onNext(true);
+            subscriber.onComplete();
+        }).subscribeOn(Schedulers.io()).subscribe();
 
-                        @Override
-                        public void onComplete() throws RemoteException {
+        IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
+            @Override
+            public void onNext(String next) throws RemoteException {
+                Observable.just(next)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                                tick -> Toast.makeText(IPCSDKSampleActivity.this, "register 2:" + tick, Toast.LENGTH_SHORT).show(),
+                                throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                        );
+            }
 
-                        }
+            @Override
+            public void onComplete() throws RemoteException {
 
-                        @Override
-                        public void onError(IPCException e) throws RemoteException {
+            }
 
-                        }
-                    });
-                });
+            @Override
+            public void onError(IPCException e) throws RemoteException {
+
+            }
+        }, new IPCSDK.Observer<IPCSDK.Callback>() {
+            @Override
+            public void onError(Throwable e) {
+                Toast.makeText(IPCSDKSampleActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
 
         findViewById(R.id.exec).setOnClickListener(v ->
                 IPCSDK.getInstance()

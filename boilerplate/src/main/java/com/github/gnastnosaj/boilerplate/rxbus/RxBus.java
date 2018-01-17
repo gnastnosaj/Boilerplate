@@ -2,9 +2,9 @@ package com.github.gnastnosaj.boilerplate.rxbus;
 
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
@@ -38,7 +38,7 @@ public class RxBus {
     public <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> c) {
         List<Subject> subjectList = subjectMapper.get(tag);
         if (null == subjectList) {
-            subjectList = new ArrayList<>();
+            subjectList = new CopyOnWriteArrayList<>();
             subjectMapper.put(tag, subjectList);
             send(new RxBusEvent(tag, RxBusEvent.CREATE));
         }

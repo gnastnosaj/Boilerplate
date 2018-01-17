@@ -21,11 +21,14 @@ import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by jasontsang on 1/17/18.
@@ -43,8 +46,7 @@ public class IPCSDK {
 
     private static IPCSDK instance;
 
-    public static abstract class Callback extends IPCCallback.Stub {
-    }
+    private final static Map<Callback, Boolean> callbacks = new ConcurrentHashMap<>();
 
     private static void initialize(Application application) {
         IPCSDK.application = application;
@@ -61,24 +63,23 @@ public class IPCSDK {
     }
 
     public Observable<String> exec(String scheme, String data) {
-        return Observable.<String>create(subscriber -> {
-
-            ensure();
-
-            ipc.exec(scheme, data, new IPCRxCallback(subscriber));
-
-        }).compose(RxHelper.rxSchedulerHelper());
+        return Observable.<String>create(subscriber -> exec(scheme, data, new IPCRxCallback(subscriber))).compose(RxHelper.rxSchedulerHelper());
     }
 
-    @Deprecated
     public void exec(String scheme, String data, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
+        callbacks.put(callback, true);
+
         ipc.exec(scheme, data, callback);
+
+        callbacks.remove(callback);
     }
 
     public void subscribe(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
+
+        callbacks.put(callback, true);
 
         ipc.subscribe(callback);
     }
@@ -87,10 +88,23 @@ public class IPCSDK {
         ensure();
 
         ipc.dispose(callback);
+
+        callbacks.remove(callback);
+    }
+
+    public void register(String tag, Callback callback, Observer<Callback> observer) {
+        Observable.<Callback>create(subscriber -> {
+            register(tag, callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
     }
 
     public void register(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
+
+        callbacks.put(callback, true);
 
         ipc.register(tag, callback);
     }
@@ -99,6 +113,8 @@ public class IPCSDK {
         ensure();
 
         ipc.unregister(tag, callback);
+
+        callbacks.remove(callback);
     }
 
     private static void ensure() throws IPCInMainThreadException, ServiceNotConnectedException {
@@ -179,7 +195,27 @@ public class IPCSDK {
         }
     }
 
-    private final static class IPCRxCallback extends IPCCallback.Stub {
+    public static abstract class Observer<T> implements io.reactivex.Observer<T> {
+        @Override
+        public void onSubscribe(Disposable d) {
+
+        }
+
+        @Override
+        public void onNext(T t) {
+
+        }
+
+        @Override
+        public void onComplete() {
+
+        }
+    }
+
+    public static abstract class Callback extends IPCCallback.Stub {
+    }
+
+    private final static class IPCRxCallback extends Callback {
         private ObservableEmitter<String> emitter;
 
         public IPCRxCallback() {
