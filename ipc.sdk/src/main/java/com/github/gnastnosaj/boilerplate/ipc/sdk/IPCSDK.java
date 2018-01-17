@@ -18,9 +18,12 @@ import android.support.annotation.Nullable;
 
 import com.github.gnastnosaj.boilerplate.ipc.IPC;
 import com.github.gnastnosaj.boilerplate.ipc.IPCCallback;
+import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
 
 /**
  * Created by jasontsang on 1/17/18.
@@ -52,31 +55,49 @@ public class IPCSDK {
         return instance;
     }
 
-    public void exec(String command, IPCCallback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public Observable<String> exec(String command) {
+        return Observable.<String>create(subscriber -> {
+            ensure();
+
+            ipc.exec(command, new IPCCallback.Stub() {
+                @Override
+                public void onNext(String next) throws RemoteException {
+                    subscriber.onNext(next);
+                }
+
+                @Override
+                public void onComplete() throws RemoteException {
+                    subscriber.onComplete();
+                }
+            });
+        }).compose(RxHelper.rxSchedulerHelper());
+    }
+
+    public void exec(String command, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.exec(command, callback);
     }
 
-    public void subscribe(IPCCallback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.subscribe(callback);
     }
 
-    public void dispose(IPCCallback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void dispose(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.dispose(callback);
     }
 
-    public void register(String tag, IPCCallback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void register(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.register(tag, callback);
     }
 
-    public void unregister(String tag, IPCCallback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void unregister(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.unregister(tag, callback);

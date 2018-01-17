@@ -80,18 +80,19 @@ public class IPCService extends Service {
                 if (middleware.accept(command)) {
                     middleware.exec(command, tick -> {
                         try {
-                            callback.tick(tick);
+                            callback.onNext(tick);
                         } catch (RemoteException e) {
                             e.printStackTrace();
                         }
                     });
                 }
             }
+            callback.onComplete();
         }
 
         @Override
         public void subscribe(IPCCallback callback) throws RemoteException {
-            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(o -> callback.tick(o.toString()));
+            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(o -> callback.onNext(o.toString()));
             subscriptions.put(callback, disposable);
         }
 
@@ -105,9 +106,7 @@ public class IPCService extends Service {
             Observable observable = RxBus.getInstance().register(tag, IPCEvent.class);
             observables.put(callback, observable);
 
-            Disposable disposable = observable.subscribe(event -> {
-                callback.tick(event.toString());
-            });
+            Disposable disposable = observable.subscribe(event -> callback.onNext(event.toString()));
             subscriptions.put(callback, disposable);
         }
 
