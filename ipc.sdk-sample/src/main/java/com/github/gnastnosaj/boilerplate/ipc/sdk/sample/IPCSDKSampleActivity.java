@@ -5,6 +5,7 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.ipc.sdk.IPCSDK;
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
@@ -26,7 +27,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
         setContentView(R.layout.activity_ipc_sdk_sample);
 
         Observable.create(subscriber -> {
-            IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
+            IPCSDK.getInstance().subscribe("sample", new IPCCallback.Stub() {
                 @Override
                 public void onNext(String next) throws RemoteException {
                     Observable.just(next)
@@ -55,12 +56,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
         IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
             @Override
             public void onNext(String next) throws RemoteException {
-                Observable.just(next)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                tick -> Toast.makeText(IPCSDKSampleActivity.this, "register 2:" + tick, Toast.LENGTH_SHORT).show(),
-                                throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
-                        );
+                Toast.makeText(IPCSDKSampleActivity.this, "register 2:" + next, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -72,12 +68,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
             public void onError(IPCException e) throws RemoteException {
 
             }
-        }, new IPCSDK.Observer<IPCSDK.Callback>() {
-            @Override
-            public void onError(Throwable e) {
-                Toast.makeText(IPCSDKSampleActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        }.scheduler(AndroidSchedulers.mainThread())).subscribe(callback -> callback.onNext("hehe"), throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show());
 
         findViewById(R.id.exec).setOnClickListener(v ->
                 IPCSDK.getInstance()

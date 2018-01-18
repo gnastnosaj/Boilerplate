@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -46,7 +47,7 @@ public class IPCSDK {
 
     private static IPCSDK instance;
 
-    private final static Map<Callback, Boolean> callbacks = new ConcurrentHashMap<>();
+    private final static Map<IPCCallback.Stub, Boolean> callbacks = new ConcurrentHashMap<>();
 
     private static void initialize(Application application) {
         IPCSDK.application = application;
@@ -66,8 +67,44 @@ public class IPCSDK {
         return Observable.<String>create(subscriber -> exec(scheme, data, new IPCRxCallback(subscriber))).compose(RxHelper.rxSchedulerHelper());
     }
 
+    public Observable<Callback> register(Callback callback) {
+        return Observable.<Callback>create(subscriber -> {
+            subscribe(callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper());
+    }
+
+    public Observable<Callback> register(String tag, Callback callback) {
+        return Observable.<Callback>create(subscriber -> {
+            subscribe(tag, callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper());
+    }
+
+    public Observable<Callback> unregister(String tag, Callback callback) {
+        return Observable.<Callback>create(subscriber -> {
+            dispose(tag, callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper());
+    }
+
+    public Observable<Callback> unregister(Callback callback) {
+        return Observable.<Callback>create(subscriber -> {
+            dispose(callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper());
+    }
+
     @Deprecated
-    public void exec(String scheme, String data, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void exec(String scheme, String data, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         callbacks.put(callback, true);
@@ -77,17 +114,8 @@ public class IPCSDK {
         callbacks.remove(callback);
     }
 
-    public void subscribe(Callback callback, Observer<Callback> observer) {
-        Observable.<Callback>create(subscriber -> {
-            subscribe(callback);
-
-            subscriber.onNext(callback);
-            subscriber.onComplete();
-        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
-    }
-
     @Deprecated
-    public void subscribe(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         callbacks.put(callback, true);
@@ -95,35 +123,8 @@ public class IPCSDK {
         ipc.subscribe(callback);
     }
 
-    public void dispose(Callback callback, Observer<Callback> observer) {
-        Observable.<Callback>create(subscriber -> {
-            dispose(callback);
-
-            subscriber.onNext(callback);
-            subscriber.onComplete();
-        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
-    }
-
     @Deprecated
-    public void dispose(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
-        ensure();
-
-        ipc.dispose(callback);
-
-        callbacks.remove(callback);
-    }
-
-    public void register(String tag, Callback callback, Observer<Callback> observer) {
-        Observable.<Callback>create(subscriber -> {
-            register(tag, callback);
-
-            subscriber.onNext(callback);
-            subscriber.onComplete();
-        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
-    }
-
-    @Deprecated
-    public void register(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void subscribe(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         callbacks.put(callback, true);
@@ -131,17 +132,17 @@ public class IPCSDK {
         ipc.register(tag, callback);
     }
 
-    public void unregister(String tag, Callback callback, Observer<Callback> observer) {
-        Observable.<Callback>create(subscriber -> {
-            unregister(tag, callback);
+    @Deprecated
+    public void dispose(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+        ensure();
 
-            subscriber.onNext(callback);
-            subscriber.onComplete();
-        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
+        ipc.dispose(callback);
+
+        callbacks.remove(callback);
     }
 
     @Deprecated
-    public void unregister(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public void dispose(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.unregister(tag, callback);
@@ -245,6 +246,28 @@ public class IPCSDK {
     }
 
     public static abstract class Callback extends IPCCallback.Stub {
+        public Callback scheduler(Scheduler scheduler) {
+            final Callback origin = this;
+
+            Callback delegate = new Callback() {
+                @Override
+                public void onNext(String next) throws RemoteException {
+                    Observable.just(origin).observeOn(scheduler).subscribe(callback -> callback.onNext(next));
+                }
+
+                @Override
+                public void onComplete() throws RemoteException {
+                    Observable.just(origin).observeOn(scheduler).subscribe(callback -> callback.onComplete());
+                }
+
+                @Override
+                public void onError(IPCException e) throws RemoteException {
+                    Observable.just(origin).observeOn(scheduler).subscribe(callback -> callback.onError(e));
+                }
+            };
+
+            return delegate;
+        }
     }
 
     private final static class IPCRxCallback extends Callback {
