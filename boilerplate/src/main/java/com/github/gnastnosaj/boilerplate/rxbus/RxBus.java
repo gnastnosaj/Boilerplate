@@ -2,8 +2,9 @@ package com.github.gnastnosaj.boilerplate.rxbus;
 
 import android.support.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.reactivex.Observable;
@@ -33,29 +34,37 @@ public class RxBus {
         bus.onNext(o);
     }
 
-    private final ConcurrentHashMap<Object, List<Subject>> subjectMapper = new ConcurrentHashMap<>();
+    private final Map<Object, List<Subject>> subjectMapper = new HashMap<>();
 
-    public synchronized <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> c) {
-        List<Subject> subjectList = subjectMapper.get(tag);
-        if (null == subjectList) {
-            subjectList = new CopyOnWriteArrayList<>();
-            subjectMapper.put(tag, subjectList);
-            send(new RxBusEvent(tag, RxBusEvent.CREATE));
-        }
+    public <T> Observable<T> register(@NonNull Object tag, @NonNull Class<T> c) {
         Subject subject = PublishSubject.create().toSerialized();
-        subjectList.add(subject);
-        send(new RxBusEvent(tag, RxBusEvent.ADD, subject));
+
+        synchronized (subjectMapper) {
+            List<Subject> subjectList = subjectMapper.get(tag);
+            if (null == subjectList) {
+                subjectList = new CopyOnWriteArrayList<>();
+                subjectMapper.put(tag, subjectList);
+                send(new RxBusEvent(tag, RxBusEvent.CREATE));
+            }
+
+            subjectList.add(subject);
+            send(new RxBusEvent(tag, RxBusEvent.ADD, subject));
+        }
+
         return subject;
     }
 
-    public synchronized void unregister(@NonNull Object tag, @NonNull Observable observable) {
-        List<Subject> subjectList = subjectMapper.get(tag);
-        if (null != subjectList) {
-            subjectList.remove(observable);
-            send(new RxBusEvent(tag, RxBusEvent.REMOVE, observable));
-            if (subjectList.isEmpty()) {
-                subjectMapper.remove(tag);
-                send(new RxBusEvent(tag, RxBusEvent.DESTROY));
+    public void unregister(@NonNull Object tag, @NonNull Observable observable) {
+        synchronized (subjectMapper) {
+            List<Subject> subjectList = subjectMapper.get(tag);
+            if (null != subjectList) {
+                subjectList.remove(observable);
+                send(new RxBusEvent(tag, RxBusEvent.REMOVE, observable));
+
+                if (subjectList.isEmpty()) {
+                    subjectMapper.remove(tag);
+                    send(new RxBusEvent(tag, RxBusEvent.DESTROY));
+                }
             }
         }
     }
