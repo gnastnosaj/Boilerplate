@@ -110,9 +110,9 @@ public class IPCService extends Service {
 
         @Override
         public void subscribe(IPCCallback callback) throws RemoteException {
-            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(o -> {
+            Disposable disposable = RxBus.getInstance().toObserverable().subscribe(event -> {
                 try {
-                    callback.onNext(o.toString());
+                    callback.onNext(event.toString());
                 } catch (Exception e) {
                     dispose(callback);
                 }
