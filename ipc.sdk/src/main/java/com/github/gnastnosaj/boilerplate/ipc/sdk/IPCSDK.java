@@ -66,6 +66,7 @@ public class IPCSDK {
         return Observable.<String>create(subscriber -> exec(scheme, data, new IPCRxCallback(subscriber))).compose(RxHelper.rxSchedulerHelper());
     }
 
+    @Deprecated
     public void exec(String scheme, String data, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
@@ -76,6 +77,16 @@ public class IPCSDK {
         callbacks.remove(callback);
     }
 
+    public void subscribe(Callback callback, Observer<Callback> observer) {
+        Observable.<Callback>create(subscriber -> {
+            subscribe(callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
+    }
+
+    @Deprecated
     public void subscribe(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
@@ -84,6 +95,16 @@ public class IPCSDK {
         ipc.subscribe(callback);
     }
 
+    public void dispose(Callback callback, Observer<Callback> observer) {
+        Observable.<Callback>create(subscriber -> {
+            dispose(callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
+    }
+
+    @Deprecated
     public void dispose(Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
@@ -101,6 +122,7 @@ public class IPCSDK {
         }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
     }
 
+    @Deprecated
     public void register(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
@@ -109,6 +131,16 @@ public class IPCSDK {
         ipc.register(tag, callback);
     }
 
+    public void unregister(String tag, Callback callback, Observer<Callback> observer) {
+        Observable.<Callback>create(subscriber -> {
+            unregister(tag, callback);
+
+            subscriber.onNext(callback);
+            subscriber.onComplete();
+        }).compose(RxHelper.rxSchedulerHelper()).subscribe(observer);
+    }
+
+    @Deprecated
     public void unregister(String tag, Callback callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
