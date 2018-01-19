@@ -1,7 +1,15 @@
 language: android
+jdk: oraclejdk8
+notifications:
+  email: false
 android:
   components:
-     - build-tools-27.0.3
-     - android-27
-     - add-on
-     - extra
+    - tools
+    - platform-tools
+    - tools
+    - build-tools-27.0.3
+    - android-27
+    - add-on
+    - extra
+script:
+   - ./gradlew clean build
