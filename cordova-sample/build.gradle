@@ -10,6 +10,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -33,6 +34,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:multidex:1.0.2'
     implementation project(':boilerplate')
     implementation project(':cordova')
     implementation project(':cordova.crosswalk')
