@@ -7,10 +7,10 @@
       <module fileurl="file://$PROJECT_DIR$/boilerplate/boilerplate.iml" filepath="$PROJECT_DIR$/boilerplate/boilerplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/conceal/conceal.iml" filepath="$PROJECT_DIR$/conceal/conceal.iml" />
       <module fileurl="file://$PROJECT_DIR$/cordova/cordova.iml" filepath="$PROJECT_DIR$/cordova/cordova.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cordova-sample/cordova.sample.iml" filepath="$PROJECT_DIR$/cordova-sample/cordova.sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/cordova.crosswalk/cordova.crosswalk.iml" filepath="$PROJECT_DIR$/cordova.crosswalk/cordova.crosswalk.iml" />
       <module fileurl="file://$PROJECT_DIR$/cordova.ext/cordova.ext.iml" filepath="$PROJECT_DIR$/cordova.ext/cordova.ext.iml" />
       <module fileurl="file://$PROJECT_DIR$/cordova.plugin/cordova.plugin.iml" filepath="$PROJECT_DIR$/cordova.plugin/cordova.plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.sample/cordova.sample.iml" filepath="$PROJECT_DIR$/cordova.sample/cordova.sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/ipc/ipc.iml" filepath="$PROJECT_DIR$/ipc/ipc.iml" />
       <module fileurl="file://$PROJECT_DIR$/ipc-sample/ipc-sample.iml" filepath="$PROJECT_DIR$/ipc-sample/ipc-sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/ipc.aidl/ipc.aidl.iml" filepath="$PROJECT_DIR$/ipc.aidl/ipc.aidl.iml" />
