@@ -26,5 +26,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    provided project(':ipc.middleware')
+    compileOnly project(':ipc.middleware')
 }

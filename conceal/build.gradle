@@ -26,5 +26,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    provided project(':boilerplate')
+    compileOnly project(':boilerplate')
 }

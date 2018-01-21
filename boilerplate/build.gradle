@@ -29,7 +29,7 @@ dependencies {
     api 'com.android.support:appcompat-v7:+'
     api 'com.android.support:recyclerview-v7:+'
 
-    provided 'com.squareup.leakcanary:leakcanary-android:+'
+    compileOnly 'com.squareup.leakcanary:leakcanary-android:+'
     api 'com.wanjian:cockroach:+'
     api 'com.alipay.euler:andfix:+'
 

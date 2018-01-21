@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'tomato'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,6 +12,9 @@ android {
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         multiDexEnabled true
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
     }
 
     buildTypes {
@@ -21,8 +25,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 }
 
@@ -37,7 +41,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.2'
     implementation project(':boilerplate')
     implementation project(':cordova')
-    implementation project(':cordova.crosswalk')
+    implementation project(':cordova.crosswalk.plus')
     implementation project(':cordova.ext')
     implementation project(':cordova.plugin')
 }

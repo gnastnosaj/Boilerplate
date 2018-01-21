@@ -26,5 +26,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    provided project(':cordova')
+    compileOnly project(':cordova')
 }
