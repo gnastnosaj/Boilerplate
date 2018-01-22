@@ -33,5 +33,5 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly project(':cordova')
-    implementation 'org.xwalk:xwalk_core_library:+'
+    api 'org.xwalk:xwalk_core_library:+'
 }

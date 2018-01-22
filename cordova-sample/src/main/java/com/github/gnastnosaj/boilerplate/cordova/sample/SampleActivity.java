@@ -2,6 +2,7 @@ package com.github.gnastnosaj.boilerplate.cordova.sample;
 
 import android.os.Bundle;
 
+import com.github.gnastnosaj.boilerplate.cordova.crosswalk.plus.HackyWebViewEngineWorkaround;
 import com.github.gnastnosaj.boilerplate.cordova.ext.HackyCordovaActivity;
 
 /**
@@ -12,6 +13,8 @@ public class SampleActivity extends HackyCordovaActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        HackyWebViewEngineWorkaround.WORKAROUND.add((webView, url) -> webView.setInitialScale(100));
 
         super.init();
 
