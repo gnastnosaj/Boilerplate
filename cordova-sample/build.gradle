@@ -28,6 +28,10 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
+
+    tomato {
+        debug true
+    }
 }
 
 repositories {
@@ -41,7 +45,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.2'
     implementation project(':boilerplate')
     implementation project(':cordova')
-    implementation project(':cordova.crosswalk.plus')
+    implementation project(':cordova.crosswalk')
     implementation project(':cordova.ext')
+    implementation project(':cordova.crosswalk.ext')
     implementation project(':cordova.plugin')
 }

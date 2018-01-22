@@ -2,8 +2,11 @@ package com.github.gnastnosaj.boilerplate.cordova.sample;
 
 import android.os.Bundle;
 
-import com.github.gnastnosaj.boilerplate.cordova.crosswalk.plus.HackyWebViewEngineWorkaround;
-import com.github.gnastnosaj.boilerplate.cordova.ext.HackyCordovaActivity;
+import com.github.gnastnosaj.boilerplate.cordova.crosswalk.ext.HackyXWalkWorkaround;
+import com.github.gnastnosaj.boilerplate.cordova.crosswalk.ext.HackyCordovaActivity;
+
+import org.crosswalk.engine.XWalkCordovaView;
+import org.xwalk.core.XWalkSettings;
 
 /**
  * Created by jasontsang on 1/19/18.
@@ -14,11 +17,30 @@ public class SampleActivity extends HackyCordovaActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        HackyWebViewEngineWorkaround.WORKAROUND.add((webView, url) -> webView.setInitialScale(100));
+        HackyXWalkWorkaround.WORKAROUND.add(new HackyXWalkWorkaround() {
+            @Override
+            public void ready(XWalkCordovaView webView) {
+                webView.setOnLongClickListener(v -> true);
+            }
+
+            @Override
+            public void when(XWalkCordovaView webView, String url) {
+                webView.setInitialScale(100);
+
+                XWalkSettings webSettings = webView.getSettings();
+                webSettings.setBuiltInZoomControls(false);
+                webSettings.setSupportZoom(false);
+            }
+        });
 
         super.init();
 
         loadUrl("https://github.com/gnastnosaj");
+    }
+
+    @Override
+    public void onReceivedError(int errorCode, String description, String failingUrl) {
+        //super.onReceivedError(errorCode, description, failingUrl);
     }
 
     @Override
