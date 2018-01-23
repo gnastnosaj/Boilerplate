@@ -97,7 +97,7 @@ public class Channel extends CordovaPlugin {
                             data = new JSONObject();
                         }
                         try {
-                            data.put("onNext", true);
+                            data.put("__channel__keep__", true);
                         } catch (JSONException e) {
                             subscriber.onError(e);
                         }
@@ -126,7 +126,7 @@ public class Channel extends CordovaPlugin {
                             throwable -> callbackContext.error(throwable.getMessage()),
                             () -> {
                                 JSONObject result = new JSONObject();
-                                result.put("onNext", false);
+                                result.put("__channel__keep__", false);
                                 callbackContext.success(result);
                             }
                     );

@@ -35,7 +35,7 @@ public class SampleActivity extends HackyCordovaActivity {
 
         super.init();
 
-        loadUrl("https://github.com/gnastnosaj");
+        loadUrl(launchUrl);
     }
 
     @Override
