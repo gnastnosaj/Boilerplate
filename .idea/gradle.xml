@@ -25,6 +25,7 @@
             <option value="$PROJECT_DIR$/ipc.sdk" />
             <option value="$PROJECT_DIR$/ipc.sdk-sample" />
             <option value="$PROJECT_DIR$/push" />
+            <option value="$PROJECT_DIR$/rxbus" />
             <option value="$PROJECT_DIR$/util" />
           </set>
         </option>

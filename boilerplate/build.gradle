@@ -26,6 +26,8 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':rxbus')
+
     api 'com.android.support:appcompat-v7:+'
     api 'com.android.support:recyclerview-v7:+'
 
@@ -35,9 +37,6 @@ dependencies {
 
     api 'com.jakewharton.timber:timber:+'
     implementation 'com.jiongbull:jlog:+'
-
-    api 'io.reactivex.rxjava2:rxjava:+'
-    api 'io.reactivex.rxjava2:rxandroid:+'
 
     api 'com.tbruyelle.rxpermissions2:rxpermissions:+'
     api 'zlc.season:rxdownload2:+'
