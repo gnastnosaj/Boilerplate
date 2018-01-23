@@ -15,8 +15,6 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import timber.log.Timber;
-
 public class PageFlipView extends GLSurfaceView implements Renderer {
 
     private Handler mHandler;
@@ -128,7 +126,7 @@ public class PageFlipView extends GLSurfaceView implements Renderer {
 
             mPageRender.onSurfaceChanged(width, height);
         } catch (PageFlipException e) {
-            Timber.e(e);
+            e.printStackTrace();
         }
     }
 
@@ -137,7 +135,7 @@ public class PageFlipView extends GLSurfaceView implements Renderer {
         try {
             mPageFlip.onSurfaceCreated();
         } catch (PageFlipException e) {
-            Timber.e(e);
+            e.printStackTrace();
         }
     }
 }

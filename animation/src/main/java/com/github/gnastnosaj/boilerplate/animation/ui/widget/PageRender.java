@@ -17,7 +17,6 @@ import java.util.concurrent.CountDownLatch;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import timber.log.Timber;
 
 public class PageRender implements OnPageFlipListener {
 
@@ -77,7 +76,7 @@ public class PageRender implements OnPageFlipListener {
                             page.setSecondTexture(mBitmap);
                         }
                     } catch (Exception e) {
-                        Timber.e(e);
+                        e.printStackTrace();
                     }
                 }
                 mLastState = PageFlipState.FORWARD_FLIP;
@@ -93,7 +92,7 @@ public class PageRender implements OnPageFlipListener {
                         drawPage();
                         page.setFirstTexture(mBitmap);
                     } catch (Exception e) {
-                        Timber.e(e);
+                        e.printStackTrace();
                     }
                 }
                 mLastState = PageFlipState.BACKWARD_FLIP;
