@@ -6,4 +6,5 @@ package com.github.gnastnosaj.boilerplate.ipc.middleware;
 
 public interface IPCMiddlewareCallback {
     void perform(String data);
+    void end();
 }

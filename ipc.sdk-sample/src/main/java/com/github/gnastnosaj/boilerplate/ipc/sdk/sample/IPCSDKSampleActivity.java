@@ -76,7 +76,8 @@ public class IPCSDKSampleActivity extends BaseActivity {
                         .compose(bindUntilEvent(ActivityEvent.DESTROY))
                         .subscribe(
                                 tick -> Toast.makeText(IPCSDKSampleActivity.this, tick, Toast.LENGTH_SHORT).show(),
-                                throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show()
+                                throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show(),
+                                ()-> Toast.makeText(IPCSDKSampleActivity.this, "complete", Toast.LENGTH_SHORT).show()
                         )
         );
     }

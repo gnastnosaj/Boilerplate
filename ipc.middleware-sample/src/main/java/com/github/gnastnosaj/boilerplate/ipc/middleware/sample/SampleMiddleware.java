@@ -30,6 +30,17 @@ public class SampleMiddleware implements IPCMiddleware {
 
         new Thread(() -> {
             try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            callback.perform(data);
+            callback.end();
+        }).start();
+
+        new Thread(() -> {
+            try {
                 Thread.sleep(10000);
             } catch (InterruptedException e) {
                 e.printStackTrace();

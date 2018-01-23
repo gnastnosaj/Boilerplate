@@ -18,6 +18,7 @@ import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEvent;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCEventBus;
 import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddleware;
+import com.github.gnastnosaj.boilerplate.ipc.middleware.IPCMiddlewareCallback;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
 import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
@@ -84,14 +85,21 @@ public class IPCService extends Service {
 
             for (IPCMiddleware middleware : middlewares) {
                 if (middleware.accept(scheme)) {
-                    observables.add(Observable.create(subscriber -> middleware.exec(data, outcome -> {
-                        try {
-                            callback.onNext(outcome);
-                        } catch (RemoteException e) {
-                            e.printStackTrace();
+                    observables.add(Observable.create(subscriber -> middleware.exec(data, new IPCMiddlewareCallback() {
+                        @Override
+                        public void perform(String data) {
+                            try {
+                                callback.onNext(data);
+                            } catch (RemoteException e) {
+                                subscriber.onError(e);
+                            }
+                            subscriber.onNext(data);
                         }
-                        subscriber.onNext(outcome);
-                        subscriber.onComplete();
+
+                        @Override
+                        public void end() {
+                            subscriber.onComplete();
+                        }
                     })));
                 }
             }
@@ -102,8 +110,10 @@ public class IPCService extends Service {
                 Observable.zip(observables, outcomes -> outcomes.length)
                         .compose(RxHelper.rxSchedulerHelper())
                         .subscribe(
-                                count -> callback.onComplete(),
-                                throwable -> callback.onError(new IPCException(throwable))
+                                count -> {
+                                },
+                                throwable -> callback.onError(new IPCException(throwable)),
+                                () -> callback.onComplete()
                         );
             }
         }
@@ -122,6 +132,10 @@ public class IPCService extends Service {
 
         @Override
         public void dispose(IPCCallback callback) throws RemoteException {
+            Disposable disposable = subscriptions.get(callback);
+            if (disposable != null && !disposable.isDisposed()) {
+                disposable.dispose();
+            }
             subscriptions.remove(callback);
         }
 
@@ -143,11 +157,11 @@ public class IPCService extends Service {
 
         @Override
         public void unregister(String tag, IPCCallback callback) throws RemoteException {
+            dispose(callback);
+
             Observable observable = observables.get(callback);
             RxBus.getInstance().unregister(tag, observable);
-
             observables.remove(callback);
-            subscriptions.remove(callback);
         }
     }
 
