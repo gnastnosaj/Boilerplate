@@ -26,7 +26,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api project(':rxbus')
+    compileOnly project(':rxbus')
     api project(':ipc.aidl')
     api project(':ipc.middleware')
 }

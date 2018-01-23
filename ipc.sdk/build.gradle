@@ -27,6 +27,6 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     compileOnly 'com.android.support:support-annotations:+'
-    api project(':rxbus')
+    compileOnly project(':rxbus')
     api project(':ipc.aidl')
 }
