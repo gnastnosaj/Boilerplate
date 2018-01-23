@@ -85,7 +85,7 @@ public class IPCService extends Service {
 
             for (IPCMiddleware middleware : middlewares) {
                 if (middleware.accept(scheme)) {
-                    observables.add(Observable.create(subscriber -> middleware.exec(data, new IPCMiddlewareCallback() {
+                    observables.add(Observable.create(subscriber -> middleware.exec(scheme, data, new IPCMiddlewareCallback() {
                         @Override
                         public void perform(String data) {
                             try {

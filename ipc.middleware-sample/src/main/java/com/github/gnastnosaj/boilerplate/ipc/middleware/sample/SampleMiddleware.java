@@ -25,8 +25,8 @@ public class SampleMiddleware implements IPCMiddleware {
     }
 
     @Override
-    public void exec(String data, IPCMiddlewareCallback callback) {
-        callback.perform(data);
+    public void exec(String scheme, String data, IPCMiddlewareCallback callback) {
+        callback.perform(scheme);
 
         new Thread(() -> {
             try {

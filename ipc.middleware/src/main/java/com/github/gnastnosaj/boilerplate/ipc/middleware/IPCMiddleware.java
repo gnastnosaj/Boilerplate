@@ -11,5 +11,5 @@ public interface IPCMiddleware {
 
     boolean accept(String scheme);
 
-    void exec(String data, IPCMiddlewareCallback callback);
+    void exec(String scheme, String data, IPCMiddlewareCallback callback);
 }
