@@ -8,12 +8,12 @@ import android.widget.Toast;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.ipc.sdk.IPCSDK;
+import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 import com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by jasontsang on 1/17/18.
@@ -51,7 +51,8 @@ public class IPCSDKSampleActivity extends BaseActivity {
 
             subscriber.onNext(true);
             subscriber.onComplete();
-        }).subscribeOn(Schedulers.io()).subscribe();
+        }).compose(RxHelper.rxSchedulerHelper()).subscribe((aBoolean) -> {
+        }, throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show());
 
         IPCSDK.getInstance().register("sample", new IPCSDK.Callback() {
             @Override
@@ -77,7 +78,7 @@ public class IPCSDKSampleActivity extends BaseActivity {
                         .subscribe(
                                 tick -> Toast.makeText(IPCSDKSampleActivity.this, tick, Toast.LENGTH_SHORT).show(),
                                 throwable -> Toast.makeText(IPCSDKSampleActivity.this, throwable.getMessage(), Toast.LENGTH_SHORT).show(),
-                                ()-> Toast.makeText(IPCSDKSampleActivity.this, "complete", Toast.LENGTH_SHORT).show()
+                                () -> Toast.makeText(IPCSDKSampleActivity.this, "complete", Toast.LENGTH_SHORT).show()
                         )
         );
     }

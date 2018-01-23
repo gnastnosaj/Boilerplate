@@ -48,5 +48,5 @@ dependencies {
     implementation project(':cordova.crosswalk')
     implementation project(':cordova.ext')
     implementation project(':cordova.crosswalk.ext')
-    implementation project(':cordova.plugin')
+    implementation project(':cordova.channel')
 }
