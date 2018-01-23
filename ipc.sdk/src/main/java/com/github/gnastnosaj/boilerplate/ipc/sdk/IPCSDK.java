@@ -21,8 +21,6 @@ import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCCallback;
 import com.github.gnastnosaj.boilerplate.ipc.aidl.IPCException;
 import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -46,8 +44,6 @@ public class IPCSDK {
     private static IPC ipc;
 
     private static IPCSDK instance;
-
-    private final static Map<IPCCallback.Stub, Boolean> callbacks = new ConcurrentHashMap<>();
 
     private static void initialize(Application application) {
         IPCSDK.application = application;
@@ -107,18 +103,12 @@ public class IPCSDK {
     public void exec(String scheme, String data, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
-        callbacks.put(callback, true);
-
         ipc.exec(scheme, data, callback);
-
-        callbacks.remove(callback);
     }
 
     @Deprecated
     public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
-
-        callbacks.put(callback, true);
 
         ipc.subscribe(callback);
     }
@@ -126,8 +116,6 @@ public class IPCSDK {
     @Deprecated
     public void subscribe(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
-
-        callbacks.put(callback, true);
 
         ipc.register(tag, callback);
     }
@@ -137,8 +125,6 @@ public class IPCSDK {
         ensure();
 
         ipc.dispose(callback);
-
-        callbacks.remove(callback);
     }
 
     @Deprecated
@@ -146,8 +132,6 @@ public class IPCSDK {
         ensure();
 
         ipc.unregister(tag, callback);
-
-        callbacks.remove(callback);
     }
 
     private static void ensure() throws IPCInMainThreadException, ServiceNotConnectedException {
