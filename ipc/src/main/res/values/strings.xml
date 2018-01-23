@@ -1,3 +1,3 @@
 <resources>
-    <string name="unsupported_scheme">unsupported scheme</string>
+    <string name="unsupported_ipc_scheme">unsupported ipc scheme</string>
 </resources>

@@ -105,7 +105,7 @@ public class IPCService extends Service {
             }
 
             if (observables.isEmpty()) {
-                callback.onError(new IPCException(context.getResources().getString(R.string.unsupported_scheme)));
+                callback.onError(new IPCException(context.getResources().getString(R.string.unsupported_ipc_scheme)));
             } else {
                 Observable.zip(observables, outcomes -> outcomes.length)
                         .compose(RxHelper.rxSchedulerHelper())
@@ -121,10 +121,12 @@ public class IPCService extends Service {
         @Override
         public void subscribe(IPCCallback callback) throws RemoteException {
             Disposable disposable = RxBus.getInstance().toObserverable().subscribe(event -> {
-                try {
-                    callback.onNext(event.toString());
-                } catch (Exception e) {
-                    dispose(callback);
+                if (event instanceof IPCEvent) {
+                    try {
+                        callback.onNext(event.toString());
+                    } catch (Exception e) {
+                        dispose(callback);
+                    }
                 }
             }, throwable -> callback.onError(new IPCException(throwable)));
             subscriptions.put(callback, disposable);
