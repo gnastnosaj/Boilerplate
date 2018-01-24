@@ -4,92 +4,112 @@ function Channel() {
   this.callbacks = {};
 }
 
-Channel.prototype.exec = function(scheme, data, onNext, onError, onComplete) {
-  let callbackId = null;
-  if (this.callbackId) {
-    callbackId = this.callbackId + 1;
+Channel.prototype.newTask = function() {
+  let task = null;
+  if (this.task) {
+    task = this.task + 1;
   } else {
-    callbackId = Math.floor(Math.random() * 2000000000);
+    task = Math.floor(Math.random() * 2000000000);
   }
-  this.callbackId = callbackId;
-  callbackId = '' + callbackId;
-  this.callbacks[callbackId] = {
+  this.task = task;
+  task = '' + task;
+  return task;
+};
+
+Channel.prototype.exec = function(scheme, data, onNext, onError, onComplete) {
+  let task = this.newTask();
+  this.callbacks[task] = {
     "onNext": onNext,
     "onError": onError,
     "onComplete": onComplete
   };
 
-  let timeout = 3000;
+  let execTimeout;
   if (arguments.length == 6) {
     try {
-      timeout = arguments[5];
+      execTimeout = setTimeout(() => {
+        try {
+          if (this.callbacks[task]) {
+            delete this.callbacks[task];
+            if (onError) {
+              onError({
+                'ERROR_MSG': 'exec timeout'
+              });
+            }
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }, arguments[5]);
     } catch (e) {
         console.error(e);
     }
   }
-  let execTimeout = setTimeout(() => {
-    try {
-      if (this.callbacks[callbackId]) {
-        delete this.callbacks[callbackId];
-        if (onError) {
-          onError({
-            'ERROR_MSG': 'timeout'
-          });
-        }
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  }, timeout);
 
   let _this = this;
   cordova.exec(function(data) {
-    clearTimeout(execTimeout);
+    if(execTimeout) {
+      clearTimeout(execTimeout);
+    }
     try {
-      if (_this.callbacks[callbackId]) {
-        if(data["__channel__keep__"] && _this.callbacks[callbackId].onNext) {
-            _this.callbacks[callbackId].onNext(data);
-        }else if(_this.callbacks[callbackId].onComplete) {
-            _this.callbacks[callbackId].onComplete();
+      if (_this.callbacks[task]) {
+        if(data["__channel__keep__"] && _this.callbacks[task].onNext) {
+            _this.callbacks[task].onNext(data);
+        }else if(_this.callbacks[task].onComplete) {
+            _this.callbacks[task].onComplete();
         }
       }
     } catch (e) {
       Logger.error(service, e);
     }
   }, function(data) {
-    clearTimeout(execTimeout);
+    if(execTimeout) {
+      clearTimeout(execTimeout);
+    }
     try {
-      if (_this.callbacks[callbackId] && _this.callbacks[callbackId].onError) {
-        _this.callbacks[callbackId].onError(data);
+      if (_this.callbacks[task] && _this.callbacks[task].onError) {
+        _this.callbacks[task].onError(data);
       }
     } catch (e) {
       Logger.error(service, e);
     }
   }, "Channel", "exec", [scheme, data]);
 
-  return callbackId;
+  return task;
 };
 
-Channel.prototype.cancel = function(callbackId) {
-  if (this.callbacks[callbackId]) {
-    delete this.callbacks[callbackId];
+Channel.prototype.cancel = function(task) {
+  if (this.callbacks[task]) {
+    delete this.callbacks[task];
   }
 };
 
-Channel.prototype.subscribe = function(tag, onNext, onError) {
-  cordova.exec(onNext, onError, "Channel", "subscribe");
+Channel.prototype.subscribe = function(onNext, onError) {
+  let task = this.newTask();
+  this.callbacks[task] = {
+    "onNext": onNext,
+    "onError": onError
+  };
+  cordova.exec(onNext, onError, "Channel", "subscribe", [task]);
+  return task;
 };
 
-Channel.prototype.dispose = function(tag, onNext, onError) {
-  cordova.exec(onNext, onError, "Channel", "dispose");
+Channel.prototype.dispose = function(task) {
+  cordova.exec(null, null, "Channel", "dispose", [task]);
 };
 
 Channel.prototype.register = function(tag, onNext, onError) {
-  cordova.exec(onNext, onError, "Channel", "register", [tag]);
+  let task = this.newTask();
+  this.callbacks[task] = {
+    "onNext": onNext,
+    "onError": onError
+  };
+  cordova.exec(onNext, onError, "Channel", "register", [tag, task]);
+  return task;
 };
 
-Channel.prototype.unregister = function(tag, onNext, onError) {
-  cordova.exec(onNext, onError, "Channel", "unregister", [tag]);
+Channel.prototype.unregister = function(tag, task) {
+  cordova.exec(null, null, "Channel", "unregister", [tag, task]);
 };
 
 module.exports = new Channel();

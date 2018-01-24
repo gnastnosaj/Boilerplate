@@ -38,6 +38,8 @@ public class Channel extends CordovaPlugin {
 
     public final static Map<CallbackContext, Observable> observables = new ConcurrentHashMap<>();
 
+    public final static Map<String, CallbackContext> callbacks = new ConcurrentHashMap<>();
+
     private Context context;
 
     @Override
@@ -68,18 +70,22 @@ public class Channel extends CordovaPlugin {
                 exec(scheme, data, callbackContext);
                 break;
             case "subscribe":
-                subscribe(callbackContext);
+                String subscribeTask = args.getString(0);
+                subscribe(subscribeTask, callbackContext);
                 break;
             case "dispose":
-                dispose(callbackContext);
+                String disposeTask = args.getString(0);
+                dispose(disposeTask);
                 break;
             case "register":
                 String registerTag = args.getString(0);
-                register(registerTag, callbackContext);
+                String registerTask = args.getString(1);
+                register(registerTask, registerTag, callbackContext);
                 break;
             case "unregister":
                 String unregisterTag = args.getString(0);
-                unregister(unregisterTag, callbackContext);
+                String unregisterTask = args.getString(1);
+                unregister(unregisterTask, unregisterTag);
                 break;
         }
         return true;
@@ -133,7 +139,9 @@ public class Channel extends CordovaPlugin {
         }
     }
 
-    public void subscribe(CallbackContext callbackContext) {
+    public void subscribe(String task, CallbackContext callbackContext) {
+        callbacks.put(task, callbackContext);
+
         Disposable disposable = RxBus.getInstance().toObserverable().subscribe(event -> {
             if (event instanceof ChannelEvent) {
                 try {
@@ -141,22 +149,27 @@ public class Channel extends CordovaPlugin {
                     pluginResult.setKeepCallback(true);
                     callbackContext.sendPluginResult(pluginResult);
                 } catch (Exception e) {
-                    dispose(callbackContext);
+                    dispose(task);
                 }
             }
         }, throwable -> callbackContext.error(throwable.getMessage()));
         subscriptions.put(callbackContext, disposable);
     }
 
-    public void dispose(CallbackContext callbackContext) {
-        Disposable disposable = subscriptions.get(callbackContext);
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
+    public void dispose(String task) {
+        CallbackContext callbackContext = callbacks.get(task);
+        if (callbackContext != null) {
+            Disposable disposable = subscriptions.get(callbackContext);
+            if (disposable != null && !disposable.isDisposed()) {
+                disposable.dispose();
+            }
+            subscriptions.remove(callbackContext);
         }
-        subscriptions.remove(callbackContext);
     }
 
-    public void register(String tag, CallbackContext callbackContext) {
+    public void register(String task, String tag, CallbackContext callbackContext) {
+        callbacks.put(task, callbackContext);
+
         Observable<ChannelEvent> observable = RxBus.getInstance().register(tag, ChannelEvent.class);
         observables.put(callbackContext, observable);
 
@@ -167,17 +180,21 @@ public class Channel extends CordovaPlugin {
                 callbackContext.sendPluginResult(pluginResult);
             } catch (Exception e) {
                 e.printStackTrace();
-                unregister(tag, callbackContext);
+                unregister(task, tag);
             }
         }, throwable -> callbackContext.error(throwable.getMessage()));
         subscriptions.put(callbackContext, disposable);
     }
 
-    public void unregister(String tag, CallbackContext callbackContext) {
-        dispose(callbackContext);
+    public void unregister(String task, String tag) {
+        dispose(task);
 
-        Observable observable = observables.get(callbackContext);
-        RxBus.getInstance().unregister(tag, observable);
-        observables.remove(callbackContext);
+        CallbackContext callbackContext = callbacks.get(task);
+
+        if (callbackContext != null) {
+            Observable observable = observables.get(callbackContext);
+            RxBus.getInstance().unregister(tag, observable);
+            observables.remove(callbackContext);
+        }
     }
 }

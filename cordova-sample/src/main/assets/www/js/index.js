@@ -41,7 +41,7 @@ var app = {
 
         console.log('Received Event: ' + id);
 
-        Channel.register('sample', (data) => {
+        let task = Channel.register('sample', (data) => {
             alert(data['event']);
         }, (error) => {
             alert(error);
@@ -54,6 +54,11 @@ var app = {
         }, ()=> {
             alert("complete");
         });
+
+        setTimeout(() => {
+            alert('unregister' + task)
+            Channel.unregister('sample', task);
+        }, 10000);
     }
 };
 

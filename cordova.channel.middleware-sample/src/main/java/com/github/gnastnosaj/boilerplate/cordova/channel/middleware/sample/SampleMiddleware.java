@@ -70,6 +70,38 @@ public class SampleMiddleware implements ChannelMiddleware {
                 }
                 return c;
             });
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            eventBus.post("sample", () -> {
+                JSONObject c = new JSONObject();
+                try {
+                    c.put("event", "sample channel event 2");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return c;
+            });
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            eventBus.post("sample", () -> {
+                JSONObject c = new JSONObject();
+                try {
+                    c.put("event", "sample channel event 3");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return c;
+            });
         }).start();
     }
 }

@@ -107,17 +107,21 @@ public class IPCSDK {
     }
 
     @Deprecated
-    public void subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public IPCCallback.Stub subscribe(IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.subscribe(callback);
+
+        return callback;
     }
 
     @Deprecated
-    public void subscribe(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
+    public IPCCallback.Stub subscribe(String tag, IPCCallback.Stub callback) throws IPCInMainThreadException, ServiceNotConnectedException, RemoteException {
         ensure();
 
         ipc.register(tag, callback);
+
+        return callback;
     }
 
     @Deprecated
