@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
 import android.os.Message;
+import android.view.ViewTreeObserver;
 import android.widget.ViewFlipper;
 
 import com.eschao.android.widget.pageflip.OnPageFlipListener;
@@ -65,12 +66,14 @@ public class PageRender implements OnPageFlipListener {
             if (mPageFlip.getFlipState() == PageFlipState.FORWARD_FLIP) {
                 if (!page.isSecondTextureSet() || mLastState == PageFlipState.BACKWARD_FLIP) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
+                    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = () -> countDownLatch.countDown();
                     Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
+                        viewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
                         viewFlipper.showNext();
-                        countDownLatch.countDown();
                     });
                     try {
                         countDownLatch.await();
+                        mViewFlipper.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
                         if (!page.isSecondTextureSet()) {
                             drawPage();
                             page.setSecondTexture(mBitmap);
@@ -83,12 +86,14 @@ public class PageRender implements OnPageFlipListener {
             } else if (mPageFlip.getFlipState() == PageFlipState.BACKWARD_FLIP) {
                 if (!page.isFirstTextureSet()) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
+                    ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = () -> countDownLatch.countDown();
                     Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
+                        viewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
                         viewFlipper.showPrevious();
-                        countDownLatch.countDown();
                     });
                     try {
                         countDownLatch.await();
+                        mViewFlipper.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
                         drawPage();
                         page.setFirstTexture(mBitmap);
                     } catch (Exception e) {
