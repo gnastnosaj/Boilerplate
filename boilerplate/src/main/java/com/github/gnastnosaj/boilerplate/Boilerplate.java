@@ -147,8 +147,8 @@ public class Boilerplate {
         private boolean log = true;
 
         private boolean leakCanary = false;
-        private boolean cockroach = true;
-        private boolean patch = true;
+        private boolean patch = false;
+        private boolean cockroach = false;
 
         private boolean fresco = true;
         private ImagePipelineConfig imagePipelineConfig;
@@ -172,6 +172,21 @@ public class Boilerplate {
                 return this;
             }
 
+            public Builder leakCanary(boolean enable) {
+                config.leakCanary = enable;
+                return this;
+            }
+
+            public Builder patch(boolean enable) {
+                config.patch = enable;
+                return this;
+            }
+
+            public Builder cockroach(boolean enable) {
+                config.cockroach = enable;
+                return this;
+            }
+
             public Builder fresco(boolean enable) {
                 config.fresco = enable;
                 return this;
@@ -184,21 +199,6 @@ public class Boilerplate {
 
             public Builder setDraweeConfig(DraweeConfig draweeConfig) {
                 config.draweeConfig = draweeConfig;
-                return this;
-            }
-
-            public Builder cockroach(boolean enable) {
-                config.cockroach = enable;
-                return this;
-            }
-
-            public Builder leakCanary(boolean enable) {
-                config.leakCanary = enable;
-                return this;
-            }
-
-            public Builder patch(boolean enable) {
-                config.patch = enable;
                 return this;
             }
 

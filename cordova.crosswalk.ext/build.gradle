@@ -33,6 +33,7 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     compileOnly project(':cordova')
     compileOnly project(':cordova.crosswalk')
     compileOnly project(':cordova.ext')

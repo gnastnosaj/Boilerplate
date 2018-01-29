@@ -27,7 +27,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly project(':cordova')
-    compileOnly project(':rxbus')
-    api project(':cordova.channel.middleware')
+    api 'com.squareup.retrofit2:retrofit:+'
+    api 'com.squareup.retrofit2:adapter-rxjava2:+'
+    api 'com.squareup.okhttp3:okhttp:+'
 }

@@ -26,28 +26,21 @@ android {
 
 dependencies {
     api fileTree(include: ['*.jar'], dir: 'libs')
-    api project(':rxbus')
 
     api 'com.android.support:appcompat-v7:+'
     api 'com.android.support:recyclerview-v7:+'
 
-    compileOnly 'com.squareup.leakcanary:leakcanary-android:+'
-    api 'com.wanjian:cockroach:+'
-    api 'com.alipay.euler:andfix:+'
+    compileOnly 'com.squareup.leakcanary:leakcanary-android-no-op:+'
+    implementation 'com.wanjian:cockroach:+'
+    compileOnly 'com.alipay.euler:andfix:+'
 
     api 'com.jakewharton.timber:timber:+'
     implementation 'com.jiongbull:jlog:+'
 
-    api 'com.tbruyelle.rxpermissions2:rxpermissions:+'
-    api 'zlc.season:rxdownload2:+'
-    api 'com.jakewharton.rxbinding2:rxbinding:+'
+    api project(':rxbus')
     api 'com.trello.rxlifecycle2:rxlifecycle:+'
     api 'com.trello.rxlifecycle2:rxlifecycle-android:+'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:+'
-
-    api 'com.squareup.retrofit2:retrofit:+'
-    api 'com.squareup.retrofit2:adapter-rxjava2:+'
-    api 'com.squareup.okhttp3:okhttp:+'
 
     api 'com.facebook.fresco:fresco:+'
     api 'com.facebook.fresco:imagepipeline:+'
@@ -64,9 +57,10 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
-    api 'com.mikepenz:iconics-core:+'
     api 'net.qiujuer.genius:res:+'
     api 'com.githang:status-bar-compat:+'
+    api 'com.mikepenz:iconics-core:+'
+
     api 'com.github.gnastnosaj:Dynamicbox:17cd556'
     implementation 'com.wang.avi:library:+'
     implementation 'com.tuyenmonkey:mkloader:+'

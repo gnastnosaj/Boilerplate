@@ -30,9 +30,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     compileOnly project(':boilerplate')
     compileOnly project(':conceal')
-
     implementation 'com.parse:parse-android:+'
     implementation 'com.infstory:json2notification:+'
     implementation 'com.github.gnastnosaj:FreeView:f795c5d'

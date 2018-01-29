@@ -25,9 +25,11 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compileOnly project(':cordova')
-    compileOnly project(':rxbus')
-    api project(':cordova.channel.middleware')
+    compileOnly 'io.reactivex.rxjava2:rxjava:+'
+    api 'com.jakewharton.rxbinding2:rxbinding:+'
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:+'
+    api 'com.github.VictorAlbertos.RxCache:runtime:+'
+    api 'zlc.season:rxdownload2:+'
 }

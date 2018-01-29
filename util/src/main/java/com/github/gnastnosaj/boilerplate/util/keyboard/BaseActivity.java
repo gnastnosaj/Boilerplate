@@ -9,14 +9,7 @@ import android.widget.EditText;
  */
 
 public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.BaseActivity {
-    //region软键盘的处理
 
-    /**
-     * 清除editText的焦点
-     *
-     * @param v   焦点所在View
-     * @param ids 输入框
-     */
     public void clearViewFocus(View v, int... ids) {
         if (null != v && null != ids && ids.length > 0) {
             for (int id : ids) {
@@ -28,13 +21,6 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
         }
     }
 
-    /**
-     * 隐藏键盘
-     *
-     * @param v   焦点所在View
-     * @param ids 输入框
-     * @return true代表焦点在edit上
-     */
     public boolean isFocusEditText(View v, int... ids) {
         if (v instanceof EditText) {
             EditText tmp_et = (EditText) v;
@@ -47,7 +33,6 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
         return false;
     }
 
-    //是否触摸在指定view上面,对某个控件过滤
     public boolean isTouchView(View[] views, MotionEvent ev) {
         if (views == null || views.length == 0) return false;
         int[] location = new int[2];
@@ -63,7 +48,6 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
         return false;
     }
 
-    //是否触摸在指定view上面,对某个控件过滤
     public boolean isTouchView(int[] ids, MotionEvent ev) {
         int[] location = new int[2];
         for (int id : ids) {
@@ -79,10 +63,6 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
         }
         return false;
     }
-    //endregion
-
-    //region 右滑返回上级
-
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -94,7 +74,7 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
             if (isFocusEditText(v, hideSoftByEditViewIds())) {
                 if (isTouchView(hideSoftByEditViewIds(), ev))
                     return super.dispatchTouchEvent(ev);
-                //隐藏键盘
+
                 KeyBoardUtil.hideInputForce(this);
                 clearViewFocus(v, hideSoftByEditViewIds());
 
@@ -104,22 +84,10 @@ public class BaseActivity extends com.github.gnastnosaj.boilerplate.ui.activity.
 
     }
 
-    /**
-     * 传入EditText的Id
-     * 没有传入的EditText不做处理
-     *
-     * @return id 数组
-     */
     public int[] hideSoftByEditViewIds() {
         return null;
     }
 
-    /**
-     * 传入要过滤的View
-     * 过滤之后点击将不会有隐藏软键盘的操作
-     *
-     * @return id 数组
-     */
     public View[] filterViewByIds() {
         return null;
     }

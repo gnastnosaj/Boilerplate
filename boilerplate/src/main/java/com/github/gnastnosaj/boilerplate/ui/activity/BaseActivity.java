@@ -1,6 +1,5 @@
 package com.github.gnastnosaj.boilerplate.ui.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.ViewSwitcher;
 import com.githang.statusbar.StatusBarCompat;
 import com.github.gnastnosaj.boilerplate.R;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.util.ArrayList;
@@ -62,8 +60,6 @@ public class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        new RxPermissions(this).request(Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe();
 
         dynamicBoxObservable.compose(bindToLifecycle()).observeOn(AndroidSchedulers.mainThread()).subscribe(dynamicBoxEvent -> {
             if (!dynamicBoxes.isEmpty()) {

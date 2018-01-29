@@ -26,5 +26,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     compileOnly project(':cordova.channel.middleware')
 }

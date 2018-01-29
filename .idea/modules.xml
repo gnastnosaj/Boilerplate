@@ -21,8 +21,11 @@
       <module fileurl="file://$PROJECT_DIR$/ipc.middleware-sample/ipc.middleware-sample.iml" filepath="$PROJECT_DIR$/ipc.middleware-sample/ipc.middleware-sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/ipc.sdk/ipc.sdk.iml" filepath="$PROJECT_DIR$/ipc.sdk/ipc.sdk.iml" />
       <module fileurl="file://$PROJECT_DIR$/ipc.sdk-sample/ipc.sdk-sample.iml" filepath="$PROJECT_DIR$/ipc.sdk-sample/ipc.sdk-sample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/net/net.iml" filepath="$PROJECT_DIR$/net/net.iml" />
       <module fileurl="file://$PROJECT_DIR$/push/push.iml" filepath="$PROJECT_DIR$/push/push.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxbus/rxbus.iml" filepath="$PROJECT_DIR$/rxbus/rxbus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxplus/rxplus.iml" filepath="$PROJECT_DIR$/rxplus/rxplus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/rxplus/rxplus.iml" filepath="$PROJECT_DIR$/rxplus/rxplus.iml" />
       <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
     </modules>
   </component>
