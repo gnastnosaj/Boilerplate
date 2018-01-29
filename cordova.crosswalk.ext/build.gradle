@@ -34,7 +34,7 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly project(':cordova')
+    compileOnly project(':cordova')//Apache License 2.0
     compileOnly project(':cordova.crosswalk')
     compileOnly project(':cordova.ext')
 }

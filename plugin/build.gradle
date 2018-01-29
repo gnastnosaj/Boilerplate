@@ -26,8 +26,4 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    compileOnly project(':cordova')//Apache License 2.0
-    compileOnly project(':rxbus')
-    api project(':cordova.channel.middleware')
 }

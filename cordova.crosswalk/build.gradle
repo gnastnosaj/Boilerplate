@@ -33,6 +33,6 @@ repositories {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly project(':cordova')
-    api 'org.xwalk:xwalk_core_library:+'
+    compileOnly project(':cordova')//Apache License 2.0
+    api 'org.xwalk:xwalk_core_library:+'//BSD 3-Clause "New" or "Revised" License
 }

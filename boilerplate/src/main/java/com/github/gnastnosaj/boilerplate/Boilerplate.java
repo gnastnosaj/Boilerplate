@@ -20,6 +20,9 @@ import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
 import com.wanjian.cockroach.Cockroach;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import timber.log.Timber;
 
 /**
@@ -32,6 +35,7 @@ public class Boilerplate {
     public static int versionCode;
 
     private static Application instance;
+    private static Config config;
     private static PatchManager patchManager;
 
     private static boolean runtime = true;
@@ -61,7 +65,9 @@ public class Boilerplate {
         DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 
         if (DEBUG && config.leakCanary) {
-            if (LeakCanary.isInAnalyzerProcess(application)) return;
+            if (LeakCanary.isInAnalyzerProcess(application)) {
+                return;
+            }
             LeakCanary.install(application);
         }
 
@@ -83,7 +89,12 @@ public class Boilerplate {
         }
 
         if (!DEBUG && config.cockroach) {
-            Cockroach.install((Thread thread, Throwable throwable) -> Timber.wtf(throwable, "CockroachException"));
+            Cockroach.install((Thread thread, Throwable throwable) -> {
+                Timber.wtf(throwable, "Cockroach Exception");
+                for (Thread.UncaughtExceptionHandler uncaughtExceptionHandler : config.uncaughtExceptionHandlerList) {
+                    uncaughtExceptionHandler.uncaughtException(thread, throwable);
+                }
+            });
         }
 
         if (config.fresco) {
@@ -149,6 +160,7 @@ public class Boilerplate {
         private boolean leakCanary = false;
         private boolean patch = false;
         private boolean cockroach = false;
+        private List<Thread.UncaughtExceptionHandler> uncaughtExceptionHandlerList;
 
         private boolean fresco = true;
         private ImagePipelineConfig imagePipelineConfig;
@@ -184,6 +196,14 @@ public class Boilerplate {
 
             public Builder cockroach(boolean enable) {
                 config.cockroach = enable;
+                return this;
+            }
+
+            public Builder addUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+                if (config.uncaughtExceptionHandlerList == null) {
+                    config.uncaughtExceptionHandlerList = new ArrayList<>();
+                }
+                config.uncaughtExceptionHandlerList.add(uncaughtExceptionHandler);
                 return this;
             }
 
@@ -224,6 +244,26 @@ public class Boilerplate {
 
     public static PatchManager getPatchManager() {
         return patchManager;
+    }
+
+    public static boolean addUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+        if (config == null) {
+            return false;
+        }
+        if (config.uncaughtExceptionHandlerList == null) {
+            config.uncaughtExceptionHandlerList = new ArrayList<>();
+        }
+        return config.uncaughtExceptionHandlerList.add(uncaughtExceptionHandler);
+    }
+
+    public static boolean removeUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
+        if (config == null) {
+            return false;
+        }
+        if (config.uncaughtExceptionHandlerList == null) {
+            config.uncaughtExceptionHandlerList = new ArrayList<>();
+        }
+        return config.uncaughtExceptionHandlerList.remove(uncaughtExceptionHandler);
     }
 
     public static void runtime(Boolean enable) {

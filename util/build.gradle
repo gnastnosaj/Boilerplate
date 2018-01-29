@@ -23,5 +23,5 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     compileOnly project(':boilerplate')
-    api 'com.github.huhx0015:HXAudioPlayer:v3.2.7'
+    api 'com.github.huhx0015:HXAudioPlayer:v3.2.7'//Apache License 2.0
 }

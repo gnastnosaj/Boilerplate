@@ -29,6 +29,6 @@ dependencies {
 
     compileOnly 'com.android.support:support-annotations:+'
 
-    api 'io.reactivex.rxjava2:rxjava:+'
+    api 'io.reactivex.rxjava2:rxjava:+'//Apache License 2.0
     api 'io.reactivex.rxjava2:rxandroid:+'
 }

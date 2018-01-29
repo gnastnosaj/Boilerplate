@@ -27,9 +27,9 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compileOnly 'io.reactivex.rxjava2:rxjava:+'
-    api 'com.jakewharton.rxbinding2:rxbinding:+'
-    api 'com.tbruyelle.rxpermissions2:rxpermissions:+'
-    api 'com.github.VictorAlbertos.RxCache:runtime:+'
-    api 'zlc.season:rxdownload2:+'
+    compileOnly 'io.reactivex.rxjava2:rxjava:+'//Apache License 2.0
+    api 'com.jakewharton.rxbinding2:rxbinding:+'//Apache License 2.0
+    api 'com.tbruyelle.rxpermissions2:rxpermissions:+'//Apache License 2.0
+    api 'com.github.VictorAlbertos.RxCache:runtime:+'//Apache License 2.0
+    api 'zlc.season:rxdownload3:+'//Apache License 2.0
 }

@@ -45,7 +45,7 @@ dependencies {
 
     implementation 'com.android.support:multidex:1.0.2'
     implementation project(':boilerplate')
-    implementation project(':cordova')
+    implementation project(':cordova')//Apache License 2.0
     implementation project(':cordova.crosswalk')
     implementation project(':cordova.ext')
     implementation project(':cordova.crosswalk.ext')

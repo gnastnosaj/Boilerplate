@@ -30,19 +30,19 @@ dependencies {
     api 'com.android.support:appcompat-v7:+'
     api 'com.android.support:recyclerview-v7:+'
 
-    compileOnly 'com.squareup.leakcanary:leakcanary-android-no-op:+'
-    implementation 'com.wanjian:cockroach:+'
-    compileOnly 'com.alipay.euler:andfix:+'
+    compileOnly 'com.squareup.leakcanary:leakcanary-android-no-op:+'//Apache License 2.0
+    implementation 'com.wanjian:cockroach:+'//Apache License 2.0
+    compileOnly 'com.alipay.euler:andfix:+'//Apache License 2.0
 
-    api 'com.jakewharton.timber:timber:+'
-    implementation 'com.jiongbull:jlog:+'
+    api 'com.jakewharton.timber:timber:+'//Apache License 2.0
+    implementation 'com.jiongbull:jlog:+'//Apache License 2.0
 
     api project(':rxbus')
-    api 'com.trello.rxlifecycle2:rxlifecycle:+'
+    api 'com.trello.rxlifecycle2:rxlifecycle:+'//Apache License 2.0
     api 'com.trello.rxlifecycle2:rxlifecycle-android:+'
     api 'com.trello.rxlifecycle2:rxlifecycle-components:+'
 
-    api 'com.facebook.fresco:fresco:+'
+    api 'com.facebook.fresco:fresco:+'//BSD 3-Clause "New" or "Revised" License
     api 'com.facebook.fresco:imagepipeline:+'
     api 'com.facebook.fresco:imagepipeline-base:+'
     api 'com.facebook.fresco:imagepipeline-okhttp3:+'
@@ -51,18 +51,18 @@ dependencies {
     api 'com.facebook.fresco:animated-drawable:+'
     api 'com.facebook.fresco:animated-gif:+'
 
-    api 'com.shizhefei:MVCHelper-Library:+'
+    api 'com.shizhefei:MVCHelper-Library:+'//Apache License 2.0
     api 'com.shizhefei:MVCHelper-SwipeRefresh:+'
-    api('me.drakeet.multitype:multitype:+') {
+    api('me.drakeet.multitype:multitype:+') {//Apache License 2.0
         exclude group: 'com.android.support'
     }
 
-    api 'net.qiujuer.genius:res:+'
-    api 'com.githang:status-bar-compat:+'
-    api 'com.mikepenz:iconics-core:+'
+    api 'net.qiujuer.genius:res:+'//Apache License 2.0
+    api 'com.githang:status-bar-compat:+'//Apache License 2.0
+    api 'com.mikepenz:iconics-core:+'//Apache License 2.0
 
-    api 'com.github.gnastnosaj:Dynamicbox:17cd556'
-    implementation 'com.wang.avi:library:+'
-    implementation 'com.tuyenmonkey:mkloader:+'
-    api 'com.airbnb.android:lottie:+'
+    api 'com.github.gnastnosaj:Dynamicbox:17cd556'//MIT License
+    implementation 'com.wang.avi:library:+'//Apache License 2.0
+    implementation 'com.tuyenmonkey:mkloader:+'//Apache License 2.0
+    api 'com.airbnb.android:lottie:+'//Apache License 2.0
 }

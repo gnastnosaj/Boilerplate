@@ -33,9 +33,9 @@ dependencies {
 
     compileOnly project(':boilerplate')
     compileOnly project(':conceal')
-    implementation 'com.parse:parse-android:+'
-    implementation 'com.infstory:json2notification:+'
-    implementation 'com.github.gnastnosaj:FreeView:f795c5d'
-    implementation 'com.github.AlbertGrobas:PolygonImageView:e4eb84acd9'
-    implementation 'q.rorbin:badgeview:+'
+    implementation 'com.parse:parse-android:+'//BSD License
+    implementation 'com.infstory:json2notification:+'//Apache License 2.0
+    implementation 'com.github.gnastnosaj:FreeView:f795c5d'//Apache License 2.0
+    implementation 'com.github.AlbertGrobas:PolygonImageView:e4eb84acd9'//Apache License 2.0
+    implementation 'q.rorbin:badgeview:+'//Apache License 2.0
 }
