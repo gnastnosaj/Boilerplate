@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/cordova.crosswalk" />
             <option value="$PROJECT_DIR$/cordova.crosswalk.ext" />
             <option value="$PROJECT_DIR$/cordova.ext" />
+            <option value="$PROJECT_DIR$/droidplugin" />
             <option value="$PROJECT_DIR$/ipc" />
             <option value="$PROJECT_DIR$/ipc-sample" />
             <option value="$PROJECT_DIR$/ipc.aidl" />
@@ -28,6 +29,7 @@
             <option value="$PROJECT_DIR$/ipc.sdk-sample" />
             <option value="$PROJECT_DIR$/net" />
             <option value="$PROJECT_DIR$/plugin" />
+            <option value="$PROJECT_DIR$/plugin-sample" />
             <option value="$PROJECT_DIR$/push" />
             <option value="$PROJECT_DIR$/rxbus" />
             <option value="$PROJECT_DIR$/rxplus" />
