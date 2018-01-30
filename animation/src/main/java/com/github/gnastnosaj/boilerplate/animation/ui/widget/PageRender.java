@@ -170,7 +170,16 @@ public class PageRender implements OnPageFlipListener {
 
         Bitmap background = Bitmap.createBitmap(mViewFlipper.getWidth(), mViewFlipper.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(background);
-        mViewFlipper.draw(canvas);
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
+            viewFlipper.draw(canvas);
+            countDownLatch.countDown();
+        });
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Rect rect = new Rect(0, 0, width, height);
         mCanvas.drawBitmap(background, null, rect, p);
         background.recycle();
