@@ -27,6 +27,13 @@ allprojects {
             url "https://jitpack.io"
         }
     }
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "com.android.support" && !requested.name.startsWith("multidex")) {
+                useVersion("27.1.0")
+            }
+        }
+    }
 }
 
 ext {
