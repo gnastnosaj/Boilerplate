@@ -18,10 +18,13 @@ android {
         }
     }
 
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        isAbortOnError = false
     }
 }
 
@@ -35,7 +38,7 @@ dependencies {
     implementation 'com.wanjian:cockroach:+'//Apache License 2.0
     compileOnly 'com.alipay.euler:andfix:+'//Apache License 2.0
 
-    api 'com.jakewharton.timber:timber:4.6.1'//Apache License 2.0
+    api 'com.jakewharton.timber:timber:+'//Apache License 2.0
     api 'com.orhanobut:logger:+'//Apache License 2.0
 
     api project(':rxbus')
