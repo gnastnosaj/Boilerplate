@@ -35,7 +35,7 @@ public class Push {
 
     public static synchronized void initialize(Context context, String uuid, String serverIP, String serverPort) {
         if (!initialized) {
-            Parse.initialize(context);
+            Parse.initialize(new Parse.Configuration.Builder(context).build());
 
             Push.context = context;
 
