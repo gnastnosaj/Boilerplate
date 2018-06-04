@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.alipay.euler.andfix.patch.PatchManager;
@@ -12,9 +13,10 @@ import com.facebook.drawee.backends.pipeline.DraweeConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
-import com.github.gnastnosaj.boilerplate.log.CrashReportingTree;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
+import com.orhanobut.logger.DiskLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
@@ -35,7 +37,6 @@ public class Boilerplate {
     public static int versionCode;
 
     private static Application instance;
-    private static Config config;
     private static PatchManager patchManager;
 
     private static boolean runtime = true;
@@ -64,7 +65,7 @@ public class Boilerplate {
 
         DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 
-        if (DEBUG && config.leakCanary) {
+        if (config.leakCanary && DEBUG) {
             if (LeakCanary.isInAnalyzerProcess(application)) {
                 return;
             }
@@ -72,7 +73,17 @@ public class Boilerplate {
         }
 
         if (config.log) {
-            CrashReportingTree.initialize(application);
+            if (DEBUG) {
+                Timber.plant(new Timber.DebugTree());
+            } else {
+                Logger.addLogAdapter(new DiskLogAdapter());
+                Timber.plant(new Timber.DebugTree() {
+                    @Override
+                    protected void log(int priority, String tag, @NonNull String message, Throwable t) {
+                        Logger.log(priority, tag, message, t);
+                    }
+                });
+            }
         }
 
         try {
@@ -88,7 +99,7 @@ public class Boilerplate {
             patchManager.loadPatch();
         }
 
-        if (!DEBUG && config.cockroach) {
+        if (config.cockroach) {
             Cockroach.install((Thread thread, Throwable throwable) -> {
                 Timber.wtf(throwable, "Cockroach Exception");
                 for (Thread.UncaughtExceptionHandler uncaughtExceptionHandler : config.uncaughtExceptionHandlerList) {
@@ -244,26 +255,6 @@ public class Boilerplate {
 
     public static PatchManager getPatchManager() {
         return patchManager;
-    }
-
-    public static boolean addUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
-        if (config == null) {
-            return false;
-        }
-        if (config.uncaughtExceptionHandlerList == null) {
-            config.uncaughtExceptionHandlerList = new ArrayList<>();
-        }
-        return config.uncaughtExceptionHandlerList.add(uncaughtExceptionHandler);
-    }
-
-    public static boolean removeUncaughtExceptionHandler(Thread.UncaughtExceptionHandler uncaughtExceptionHandler) {
-        if (config == null) {
-            return false;
-        }
-        if (config.uncaughtExceptionHandlerList == null) {
-            config.uncaughtExceptionHandlerList = new ArrayList<>();
-        }
-        return config.uncaughtExceptionHandlerList.remove(uncaughtExceptionHandler);
     }
 
     public static void runtime(Boolean enable) {

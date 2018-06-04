@@ -33,20 +33,9 @@ public class BaseActivity extends RxAppCompatActivity {
     public final static String DYNAMIC_BOX_AV_LINESCALEPARTY = "_LineScaleParty";
     public final static String DYNAMIC_BOX_AV_PACMAN = "_Pacman";
 
-    public final static String DYNAMIC_BOX_MK_SHARINGAN = "_Sharingan";
-    public final static String DYNAMIC_BOX_MK_TWINFISHESSPINNER = "_TwinFishesSpinner";
-    public final static String DYNAMIC_BOX_MK_CLASSICSPINNER = "_ClassicSpinner";
-    public final static String DYNAMIC_BOX_MK_LINESPINNER = "_LineSpinner";
-    public final static String DYNAMIC_BOX_MK_FISHSPINNER = "_FishSpinner";
-    public final static String DYNAMIC_BOX_MK_PHONEWAVE = "_PhoneWave";
-    public final static String DYNAMIC_BOX_MK_THREEPULSE = "_ThreePulse";
-    public final static String DYNAMIC_BOX_MK_FOURPULSE = "_FourPulse";
-    public final static String DYNAMIC_BOX_MK_FIVEPULSE = "_FivePulse";
-    public final static String DYNAMIC_BOX_MK_WORM = "_Worm";
-    public final static String DYNAMIC_BOX_MK_WHIRLPOOL = "_Whirlpool";
-    public final static String DYNAMIC_BOX_MK_RADAR = "_Radar";
-
-    public final static String DYNAMIC_BOX_LT_PRELOADER = "_Preloader";
+    public final static String DYNAMIC_BOX_LT_BIKING_IS_COOL = "_BikingIsCool";
+    public final static String DYNAMIC_BOX_LT_BIKING_IS_HARD = "_BikingIsHard";
+    public final static String DYNAMIC_BOX_LT_LOADING_ANIMATION = "_LoadingAnimation";
 
     public final static String PENDING_TRANSITION_LEFT_RIGHT = "_left_right";
     public final static String SWITCHER_TRANSITION_LEFT_RIGHT = "_left_right";
@@ -200,45 +189,14 @@ public class BaseActivity extends RxAppCompatActivity {
                 dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
             }
 
-            if (tagList.contains(DYNAMIC_BOX_MK_SHARINGAN)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
+            if (tagList.contains(DYNAMIC_BOX_LT_BIKING_IS_COOL)) {
+                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.biking_is_cool_lottie, null), DYNAMIC_BOX_LT_BIKING_IS_COOL);
             }
-            if (tagList.contains(DYNAMIC_BOX_MK_TWINFISHESSPINNER)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
+            if (tagList.contains(DYNAMIC_BOX_LT_BIKING_IS_HARD)) {
+                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.biking_is_hard_lottie, null), DYNAMIC_BOX_LT_BIKING_IS_HARD);
             }
-            if (tagList.contains(DYNAMIC_BOX_MK_CLASSICSPINNER)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_LINESPINNER)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_FISHSPINNER)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_PHONEWAVE)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_THREEPULSE)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_FOURPULSE)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_FIVEPULSE)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_WORM)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_WHIRLPOOL)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
-            }
-            if (tagList.contains(DYNAMIC_BOX_MK_RADAR)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
-            }
-
-            if (tagList.contains(DYNAMIC_BOX_LT_PRELOADER)) {
-                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+            if (tagList.contains(DYNAMIC_BOX_LT_LOADING_ANIMATION)) {
+                dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.loading_animation_lottie, null), DYNAMIC_BOX_LT_LOADING_ANIMATION);
             }
         }
 
@@ -254,20 +212,9 @@ public class BaseActivity extends RxAppCompatActivity {
         dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linescaleparty_avloading, null), DYNAMIC_BOX_AV_LINESCALEPARTY);
         dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.pacman_avloading, null), DYNAMIC_BOX_AV_PACMAN);
 
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.sharingan_mkloader, null), DYNAMIC_BOX_MK_SHARINGAN);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.twinfishesspinner_mkloader, null), DYNAMIC_BOX_MK_TWINFISHESSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.classicspinner_mkloader, null), DYNAMIC_BOX_MK_CLASSICSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.linespinner_mkloader, null), DYNAMIC_BOX_MK_LINESPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fishspinner_mkloader, null), DYNAMIC_BOX_MK_FISHSPINNER);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.phonewave_mkloader, null), DYNAMIC_BOX_MK_PHONEWAVE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.threepulse_mkloader, null), DYNAMIC_BOX_MK_THREEPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fourpulse_mkloader, null), DYNAMIC_BOX_MK_FOURPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.fivepulse_mkloader, null), DYNAMIC_BOX_MK_FIVEPULSE);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.worm_mkloader, null), DYNAMIC_BOX_MK_WORM);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.whirlpool_mkloader, null), DYNAMIC_BOX_MK_WHIRLPOOL);
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.radar_mkloader, null), DYNAMIC_BOX_MK_RADAR);
-
-        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.preloader_lottie, null), DYNAMIC_BOX_LT_PRELOADER);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.biking_is_cool_lottie, null), DYNAMIC_BOX_LT_BIKING_IS_COOL);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.biking_is_hard_lottie, null), DYNAMIC_BOX_LT_BIKING_IS_HARD);
+        dynamicBox.addCustomView(LayoutInflater.from(context).inflate(R.layout.loading_animation_lottie, null), DYNAMIC_BOX_LT_LOADING_ANIMATION);
 
         return dynamicBox;
     }

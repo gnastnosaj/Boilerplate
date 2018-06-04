@@ -35,7 +35,7 @@ dependencies {
     compileOnly 'com.alipay.euler:andfix:+'//Apache License 2.0
 
     api 'com.jakewharton.timber:timber:+'//Apache License 2.0
-    implementation 'com.jiongbull:jlog:+'//Apache License 2.0
+    api 'com.orhanobut:logger:+'//Apache License 2.0
 
     api project(':rxbus')
     api 'com.trello.rxlifecycle2:rxlifecycle:+'//Apache License 2.0
@@ -63,6 +63,5 @@ dependencies {
 
     api 'com.github.gnastnosaj:Dynamicbox:17cd556'//MIT License
     implementation 'com.wang.avi:library:+'//Apache License 2.0
-    implementation 'com.tuyenmonkey:mkloader:+'//Apache License 2.0
     api 'com.airbnb.android:lottie:+'//Apache License 2.0
 }
