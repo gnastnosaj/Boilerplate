@@ -6,29 +6,9 @@
       <module fileurl="file://$PROJECT_DIR$/animation/animation.iml" filepath="$PROJECT_DIR$/animation/animation.iml" />
       <module fileurl="file://$PROJECT_DIR$/boilerplate/boilerplate.iml" filepath="$PROJECT_DIR$/boilerplate/boilerplate.iml" />
       <module fileurl="file://$PROJECT_DIR$/conceal/conceal.iml" filepath="$PROJECT_DIR$/conceal/conceal.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova/cordova.iml" filepath="$PROJECT_DIR$/cordova/cordova.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova-sample/cordova-sample.iml" filepath="$PROJECT_DIR$/cordova-sample/cordova-sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.channel/cordova.channel.iml" filepath="$PROJECT_DIR$/cordova.channel/cordova.channel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.channel.middleware/cordova.channel.middleware.iml" filepath="$PROJECT_DIR$/cordova.channel.middleware/cordova.channel.middleware.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.channel.middleware-sample/cordova.channel.middleware-sample.iml" filepath="$PROJECT_DIR$/cordova.channel.middleware-sample/cordova.channel.middleware-sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.crosswalk/cordova.crosswalk.iml" filepath="$PROJECT_DIR$/cordova.crosswalk/cordova.crosswalk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.crosswalk.ext/cordova.crosswalk.ext.iml" filepath="$PROJECT_DIR$/cordova.crosswalk.ext/cordova.crosswalk.ext.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cordova.ext/cordova.ext.iml" filepath="$PROJECT_DIR$/cordova.ext/cordova.ext.iml" />
-      <module fileurl="file://$PROJECT_DIR$/droidplugin/droidplugin.iml" filepath="$PROJECT_DIR$/droidplugin/droidplugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc/ipc.iml" filepath="$PROJECT_DIR$/ipc/ipc.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc-sample/ipc-sample.iml" filepath="$PROJECT_DIR$/ipc-sample/ipc-sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc.aidl/ipc.aidl.iml" filepath="$PROJECT_DIR$/ipc.aidl/ipc.aidl.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc.middleware/ipc.middleware.iml" filepath="$PROJECT_DIR$/ipc.middleware/ipc.middleware.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc.middleware-sample/ipc.middleware-sample.iml" filepath="$PROJECT_DIR$/ipc.middleware-sample/ipc.middleware-sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc.sdk/ipc.sdk.iml" filepath="$PROJECT_DIR$/ipc.sdk/ipc.sdk.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ipc.sdk-sample/ipc.sdk-sample.iml" filepath="$PROJECT_DIR$/ipc.sdk-sample/ipc.sdk-sample.iml" />
       <module fileurl="file://$PROJECT_DIR$/net/net.iml" filepath="$PROJECT_DIR$/net/net.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin/plugin.iml" filepath="$PROJECT_DIR$/plugin/plugin.iml" />
-      <module fileurl="file://$PROJECT_DIR$/plugin-sample/plugin-sample.iml" filepath="$PROJECT_DIR$/plugin-sample/plugin-sample.iml" />
-      <module fileurl="file://$PROJECT_DIR$/push/push.iml" filepath="$PROJECT_DIR$/push/push.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxbus/rxbus.iml" filepath="$PROJECT_DIR$/rxbus/rxbus.iml" />
       <module fileurl="file://$PROJECT_DIR$/rxplus/rxplus.iml" filepath="$PROJECT_DIR$/rxplus/rxplus.iml" />
-      <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
     </modules>
   </component>
 </project>

@@ -1,41 +1,48 @@
-apply plugin: 'com.android.library'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+buildscript {
 
-    defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+    repositories {
+        google()
+        jcenter()
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    lintOptions {
-        abortOnError false
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
     }
 }
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+allprojects {
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        google()
+        jcenter()
+        mavenCentral()
+        maven {
+            url "https://jitpack.io"
+        }
+    }
+    configurations.all {
+        resolutionStrategy.eachDependency {
+            if (requested.group == "com.android.support" && !requested.name.startsWith("multidex")) {
+                useVersion("27.1.0")
+            }
+        }
+    }
+}
 
-    compileOnly project(':boilerplate')
-    compileOnly project(':conceal')
-    implementation 'com.parse:parse-android:+'//BSD License
-    implementation 'com.infstory:json2notification:+'//Apache License 2.0
-    implementation 'com.github.gnastnosaj:FreeView:f795c5d'//Apache License 2.0
-    implementation 'com.github.AlbertGrobas:PolygonImageView:e4eb84acd9'//Apache License 2.0
-    implementation 'q.rorbin:badgeview:+'//Apache License 2.0
+ext {
+    buildToolsVersion = '27.0.3'
+    targetSdkVersion = 27
+    minSdkVersion = 16
+    compileSdkVersion = targetSdkVersion
+    versionCode = 1
+    versionName = '1.0.0'
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

@@ -11,29 +11,9 @@
             <option value="$PROJECT_DIR$/animation" />
             <option value="$PROJECT_DIR$/boilerplate" />
             <option value="$PROJECT_DIR$/conceal" />
-            <option value="$PROJECT_DIR$/cordova" />
-            <option value="$PROJECT_DIR$/cordova-sample" />
-            <option value="$PROJECT_DIR$/cordova.channel" />
-            <option value="$PROJECT_DIR$/cordova.channel.middleware" />
-            <option value="$PROJECT_DIR$/cordova.channel.middleware-sample" />
-            <option value="$PROJECT_DIR$/cordova.crosswalk" />
-            <option value="$PROJECT_DIR$/cordova.crosswalk.ext" />
-            <option value="$PROJECT_DIR$/cordova.ext" />
-            <option value="$PROJECT_DIR$/droidplugin" />
-            <option value="$PROJECT_DIR$/ipc" />
-            <option value="$PROJECT_DIR$/ipc-sample" />
-            <option value="$PROJECT_DIR$/ipc.aidl" />
-            <option value="$PROJECT_DIR$/ipc.middleware" />
-            <option value="$PROJECT_DIR$/ipc.middleware-sample" />
-            <option value="$PROJECT_DIR$/ipc.sdk" />
-            <option value="$PROJECT_DIR$/ipc.sdk-sample" />
             <option value="$PROJECT_DIR$/net" />
-            <option value="$PROJECT_DIR$/plugin" />
-            <option value="$PROJECT_DIR$/plugin-sample" />
-            <option value="$PROJECT_DIR$/push" />
             <option value="$PROJECT_DIR$/rxbus" />
             <option value="$PROJECT_DIR$/rxplus" />
-            <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
