@@ -1,0 +1,41 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly project(':boilerplate')
+    compileOnly project(':conceal')
+    implementation 'com.parse:parse-android:+'//BSD License
+    implementation 'com.infstory:json2notification:+'//Apache License 2.0
+    implementation 'com.github.gnastnosaj:FreeView:f795c5d'//Apache License 2.0
+    implementation 'com.github.AlbertGrobas:PolygonImageView:e4eb84acd9'//Apache License 2.0
+    implementation 'q.rorbin:badgeview:+'//Apache License 2.0
+}
