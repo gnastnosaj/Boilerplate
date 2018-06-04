@@ -1,1 +1,0 @@
-include ':droidplugin', ':plugin', ':plugin-sample'

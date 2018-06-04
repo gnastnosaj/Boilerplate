@@ -16,9 +16,6 @@ import com.eschao.android.widget.pageflip.PageFlipState;
 
 import java.util.concurrent.CountDownLatch;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-
 public class PageRender implements OnPageFlipListener {
 
     protected final static int MSG_ENDED_DRAWING_FRAME = 1;
@@ -67,9 +64,9 @@ public class PageRender implements OnPageFlipListener {
                 if (!page.isSecondTextureSet() || mLastState == PageFlipState.BACKWARD_FLIP) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = () -> countDownLatch.countDown();
-                    Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
-                        viewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-                        viewFlipper.showNext();
+                    mViewFlipper.post(() -> {
+                        mViewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+                        mViewFlipper.showNext();
                     });
                     try {
                         countDownLatch.await();
@@ -87,9 +84,9 @@ public class PageRender implements OnPageFlipListener {
                 if (!page.isFirstTextureSet()) {
                     CountDownLatch countDownLatch = new CountDownLatch(1);
                     ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = () -> countDownLatch.countDown();
-                    Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
-                        viewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
-                        viewFlipper.showPrevious();
+                    mViewFlipper.post(() -> {
+                        mViewFlipper.getViewTreeObserver().addOnGlobalLayoutListener(onGlobalLayoutListener);
+                        mViewFlipper.showPrevious();
                     });
                     try {
                         countDownLatch.await();
@@ -171,8 +168,8 @@ public class PageRender implements OnPageFlipListener {
         Bitmap background = Bitmap.createBitmap(mViewFlipper.getWidth(), mViewFlipper.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(background);
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        Observable.just(mViewFlipper).observeOn(AndroidSchedulers.mainThread()).subscribe(viewFlipper -> {
-            viewFlipper.draw(canvas);
+        mViewFlipper.post(() -> {
+            mViewFlipper.draw(canvas);
             countDownLatch.countDown();
         });
         try {

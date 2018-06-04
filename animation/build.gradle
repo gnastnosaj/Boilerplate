@@ -27,6 +27,5 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
-    compileOnly project(':rxbus')
     implementation 'com.github.eschao:android-PageFlip:+'//Apache License 2.0
 }
