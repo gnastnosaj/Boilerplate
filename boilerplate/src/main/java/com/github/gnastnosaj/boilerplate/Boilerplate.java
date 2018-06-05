@@ -58,8 +58,8 @@ public class Boilerplate {
         initialize(application, new Config.Builder().setImagePipelineConfig(imagePipelineConfig).setDraweeConfig(draweeConfig).build());
     }
 
-    public static synchronized void initialize(Application application, Config config) {
-        if (initialized) return;
+    public static synchronized boolean initialize(Application application, Config config) {
+        if (initialized) return false;
 
         instance = application;
 
@@ -67,7 +67,7 @@ public class Boilerplate {
 
         if (config.leakCanary && DEBUG) {
             if (LeakCanary.isInAnalyzerProcess(application)) {
-                return;
+                return false;
             }
             LeakCanary.install(application);
         }
@@ -163,6 +163,8 @@ public class Boilerplate {
         });
 
         initialized = true;
+
+        return true;
     }
 
     public static class Config {
