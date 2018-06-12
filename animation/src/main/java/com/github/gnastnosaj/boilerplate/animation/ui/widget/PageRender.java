@@ -15,6 +15,7 @@ import com.eschao.android.widget.pageflip.PageFlip;
 import com.eschao.android.widget.pageflip.PageFlipState;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 public class PageRender implements OnPageFlipListener {
 
@@ -69,7 +70,7 @@ public class PageRender implements OnPageFlipListener {
                         mViewFlipper.showNext();
                     });
                     try {
-                        countDownLatch.await();
+                        countDownLatch.await(3, TimeUnit.SECONDS);
                         mViewFlipper.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
                         if (!page.isSecondTextureSet()) {
                             drawPage();
@@ -89,7 +90,7 @@ public class PageRender implements OnPageFlipListener {
                         mViewFlipper.showPrevious();
                     });
                     try {
-                        countDownLatch.await();
+                        countDownLatch.await(3, TimeUnit.SECONDS);
                         mViewFlipper.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
                         drawPage();
                         page.setFirstTexture(mBitmap);
@@ -173,8 +174,8 @@ public class PageRender implements OnPageFlipListener {
             countDownLatch.countDown();
         });
         try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
+            countDownLatch.await(3, TimeUnit.SECONDS);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Rect rect = new Rect(0, 0, width, height);

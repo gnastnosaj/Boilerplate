@@ -105,16 +105,16 @@ public class BaseActivity extends RxAppCompatActivity {
         }
     }
 
-    protected void initSystemBar(int resource) {
+    protected void setStatusBarColor(int resource) {
         StatusBarCompat.setStatusBarColor(BaseActivity.this, getResources().getColor(resource));
     }
 
-    protected void initSystemBar() {
-        initSystemBar(R.color.colorPrimaryDark);
+    protected void setStatusBarColor() {
+        setStatusBarColor(R.color.colorPrimaryDark);
     }
 
     protected void translucentStatusBar() {
-        StatusBarCompat.setLightStatusBar(getWindow(), true);
+        StatusBarCompat.setTranslucent(getWindow(), true);
     }
 
     protected DynamicBox createDynamicBox(View targetView, String[] tags, String switcherTransition) {
