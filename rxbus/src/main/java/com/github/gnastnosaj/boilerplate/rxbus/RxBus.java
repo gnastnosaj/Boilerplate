@@ -44,11 +44,11 @@ public class RxBus {
             if (null == subjectList) {
                 subjectList = new CopyOnWriteArrayList<>();
                 subjectMapper.put(tag, subjectList);
-                send(new RxBusEvent(tag, RxBusEvent.CREATE));
+                send(new RxBusEvent(RxBusEvent.CREATE, tag));
             }
 
             subjectList.add(subject);
-            send(new RxBusEvent(tag, RxBusEvent.ADD, subject));
+            send(new RxBusEvent(RxBusEvent.ADD, tag, subject));
         }
 
         return subject;
@@ -59,11 +59,11 @@ public class RxBus {
             List<Subject> subjectList = subjectMapper.get(tag);
             if (null != subjectList) {
                 subjectList.remove(observable);
-                send(new RxBusEvent(tag, RxBusEvent.REMOVE, observable));
+                send(new RxBusEvent(RxBusEvent.REMOVE, tag, observable));
 
                 if (subjectList.isEmpty()) {
                     subjectMapper.remove(tag);
-                    send(new RxBusEvent(tag, RxBusEvent.DESTROY));
+                    send(new RxBusEvent(RxBusEvent.DESTROY, tag));
                 }
             }
         }
@@ -84,26 +84,26 @@ public class RxBus {
         public final static int REMOVE = 2;
         public final static int DESTROY = 3;
 
-        private Object tag;
         private int type;
+        private Object tag;
         private Observable observable;
 
-        private RxBusEvent(Object tag, int type) {
-            this(tag, type, null);
+        private RxBusEvent(int type, Object tag) {
+            this(type, tag, null);
         }
 
-        private RxBusEvent(Object tag, int type, Observable observable) {
-            this.tag = tag;
+        private RxBusEvent(int type, Object tag, Observable observable) {
             this.type = type;
+            this.tag = tag;
             this.observable = observable;
-        }
-
-        public Object getTag() {
-            return tag;
         }
 
         public int getType() {
             return type;
+        }
+
+        public Object getTag() {
+            return tag;
         }
 
         public Observable getObservable() {
