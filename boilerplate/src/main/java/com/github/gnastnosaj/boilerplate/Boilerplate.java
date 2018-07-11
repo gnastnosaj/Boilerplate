@@ -15,8 +15,6 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
-import com.orhanobut.logger.DiskLogAdapter;
-import com.orhanobut.logger.Logger;
 import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
@@ -72,19 +70,12 @@ public class Boilerplate {
             LeakCanary.install(application);
         }
 
-        if (config.log) {
-            if (DEBUG) {
-                Timber.plant(new Timber.DebugTree());
-            } else {
-                Logger.addLogAdapter(new DiskLogAdapter());
-                Timber.plant(new Timber.DebugTree() {
-                    @Override
-                    protected void log(int priority, String tag, @NonNull String message, Throwable t) {
-                        Logger.log(priority, tag, message, t);
-                    }
-                });
+        Timber.plant(config.logger == null ? new Timber.DebugTree() : new Timber.DebugTree() {
+            @Override
+            protected void log(int priority, String tag, @NonNull String message, Throwable t) {
+                config.logger.log(priority, tag, message, t);
             }
-        }
+        });
 
         try {
             versionName = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
@@ -168,7 +159,7 @@ public class Boilerplate {
     }
 
     public static class Config {
-        private boolean log = true;
+        private Logger logger;
 
         private boolean leakCanary = false;
         private boolean patch = false;
@@ -185,6 +176,10 @@ public class Boilerplate {
         private Config() {
         }
 
+        public static interface Logger {
+            void log(int priority, String tag, @NonNull String message, Throwable t);
+        }
+
         public static class Builder {
             private Config config;
 
@@ -192,8 +187,8 @@ public class Boilerplate {
                 config = new Config();
             }
 
-            public Builder log(boolean enable) {
-                config.log = enable;
+            public Builder logger(Logger logger) {
+                config.logger = logger;
                 return this;
             }
 

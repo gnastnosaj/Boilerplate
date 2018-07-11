@@ -39,7 +39,6 @@ dependencies {
     compileOnly 'com.alipay.euler:andfix:+'//Apache License 2.0
 
     api 'com.jakewharton.timber:timber:+'//Apache License 2.0
-    api 'com.orhanobut:logger:+'//Apache License 2.0
 
     api project(':rxbus')
     api 'com.trello.rxlifecycle2:rxlifecycle:+'//Apache License 2.0
