@@ -15,6 +15,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
+import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
@@ -23,6 +24,9 @@ import com.wanjian.cockroach.Cockroach;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import okio.BufferedSource;
+import okio.Okio;
 import timber.log.Timber;
 
 /**
@@ -63,7 +67,7 @@ public class Boilerplate {
 
         DEBUG = application.getApplicationInfo() != null && (application.getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
 
-        if (config.leakCanary && DEBUG) {
+        if (config.leakCanary) {
             if (LeakCanary.isInAnalyzerProcess(application)) {
                 return false;
             }
@@ -76,6 +80,23 @@ public class Boilerplate {
                 config.logger.log(priority, tag, message, t);
             }
         });
+
+        if (config.logcat != null) {
+            Observable.<String>create(emitter -> {
+                Runtime.getRuntime().exec("logcat -c");
+                Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
+                BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
+                while (true) {
+                    String message = bufferedSource.readUtf8Line();
+                    if (message != null) {
+                        emitter.onNext(message);
+                    }
+                }
+            })
+                    .retry()
+                    .compose(RxHelper.rxSchedulerHelper())
+                    .subscribe(message -> config.logcat.log(message), throwable -> Timber.e(throwable));
+        }
 
         try {
             versionName = application.getPackageManager().getPackageInfo(application.getPackageName(), PackageManager.GET_CONFIGURATIONS).versionName;
@@ -160,6 +181,7 @@ public class Boilerplate {
 
     public static class Config {
         private Logger logger;
+        private Logcat logcat;
 
         private boolean leakCanary = false;
         private boolean patch = false;
@@ -180,6 +202,10 @@ public class Boilerplate {
             void log(int priority, String tag, @NonNull String message, Throwable t);
         }
 
+        public static interface Logcat {
+            void log(@NonNull String message);
+        }
+
         public static class Builder {
             private Config config;
 
@@ -189,6 +215,11 @@ public class Boilerplate {
 
             public Builder logger(Logger logger) {
                 config.logger = logger;
+                return this;
+            }
+
+            public Builder logcat(Logcat logcat) {
+                config.logcat = logcat;
                 return this;
             }
 

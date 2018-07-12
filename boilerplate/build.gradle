@@ -39,6 +39,7 @@ dependencies {
     compileOnly 'com.alipay.euler:andfix:+'//Apache License 2.0
 
     api 'com.jakewharton.timber:timber:+'//Apache License 2.0
+    api 'com.squareup.okio:okio:+'//Apache License 2.0
 
     api project(':rxbus')
     api 'com.trello.rxlifecycle2:rxlifecycle:+'//Apache License 2.0
@@ -60,11 +61,11 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
-    api 'net.qiujuer.genius:res:+'//Apache License 2.0
     api 'com.githang:status-bar-compat:+'//Apache License 2.0
+    api 'net.qiujuer.genius:res:+'//Apache License 2.0
     api 'com.mikepenz:iconics-core:+'//Apache License 2.0
 
     api 'com.github.gnastnosaj:Dynamicbox:17cd556'//MIT License
-    implementation 'com.wang.avi:library:+'//Apache License 2.0
     api 'com.airbnb.android:lottie:+'//Apache License 2.0
+    implementation 'com.wang.avi:library:+'//Apache License 2.0
 }
