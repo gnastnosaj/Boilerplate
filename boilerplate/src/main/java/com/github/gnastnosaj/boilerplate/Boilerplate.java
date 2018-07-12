@@ -15,7 +15,6 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.github.gnastnosaj.boilerplate.event.ActivityLifecycleEvent;
 import com.github.gnastnosaj.boilerplate.mvchelper.LoadViewFactory;
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
-import com.github.gnastnosaj.boilerplate.rxbus.RxHelper;
 import com.shizhefei.mvc.ILoadViewFactory;
 import com.shizhefei.mvc.MVCHelper;
 import com.squareup.leakcanary.LeakCanary;
@@ -25,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okio.BufferedSource;
 import okio.Okio;
 import timber.log.Timber;
@@ -94,7 +94,7 @@ public class Boilerplate {
                 }
             })
                     .retry()
-                    .compose(RxHelper.rxSchedulerHelper())
+                    .subscribeOn(Schedulers.io())
                     .subscribe(message -> config.logcat.log(message), throwable -> Timber.e(throwable));
         }
 
