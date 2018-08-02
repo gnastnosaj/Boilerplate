@@ -86,36 +86,43 @@ public class Boilerplate {
 
         if (config.logcat != null) {
             Observable
-                    .<Process>create(emitter -> {
+                    .defer(() -> {
                         Runtime.getRuntime().exec("logcat -c");
-                        Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
-                        emitter.onNext(process);
-                        emitter.onComplete();
-                    })
-                    .delay(1, TimeUnit.SECONDS)
-                    .map(process -> {
-                        try {
-                            process.exitValue();
-                            Timber.d("logcat | grep %s", application.getPackageName());
-                            return Runtime.getRuntime().exec("logcat | grep " + application.getPackageName());
-                        } catch (Throwable throwable) {
-                            Timber.d("logcat -e %s", application.getPackageName());
-                            return process;
-                        }
-                    })
-                    .flatMap(process ->
-                            Observable.<String>create(emitter -> {
-                                        BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
-                                        while (true) {
-                                            String message = bufferedSource.readUtf8Line();
-                                            if (message != null) {
-                                                emitter.onNext(message);
-                                            }
-                                        }
+                        return Observable
+                                .<Process>create(emitter -> {
+                                    Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
+                                    emitter.onNext(process);
+                                    emitter.onComplete();
+                                })
+                                .delay(1, TimeUnit.SECONDS)
+                                .observeOn(Schedulers.io())
+                                .map(process -> {
+                                    try {
+                                        process.exitValue();
+                                        Timber.d("logcat | grep %s", application.getPackageName());
+                                        return Runtime.getRuntime().exec("logcat | grep " + application.getPackageName());
+                                    } catch (Throwable throwable) {
+                                        Timber.d("logcat -e %s", application.getPackageName());
+                                        return process;
                                     }
-                            ).subscribeOn(Schedulers.io())
-                    )
-                    .retry()
+                                })
+                                .flatMap(process ->
+                                        Observable
+                                                .<String>create(emitter -> {
+                                                            BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
+                                                            while (true) {
+                                                                String message = bufferedSource.readUtf8Line();
+                                                                if (message != null) {
+                                                                    emitter.onNext(message);
+                                                                }
+                                                            }
+                                                        }
+                                                )
+                                                .doOnError(throwable -> process.destroy())
+                                )
+                                .doOnError(throwable -> Timber.e(throwable))
+                                .retry();
+                    })
                     .subscribeOn(Schedulers.io())
                     .subscribe(message -> config.logcat.log(message), throwable -> Timber.e(throwable));
         }
