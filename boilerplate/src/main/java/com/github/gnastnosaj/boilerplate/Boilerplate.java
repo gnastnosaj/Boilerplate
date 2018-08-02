@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.exceptions.UndeliverableException;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import okio.BufferedSource;
 import okio.Okio;
@@ -139,6 +141,14 @@ public class Boilerplate {
                 }
             });
         }
+
+        RxJavaPlugins.setErrorHandler(e -> {
+            if (e instanceof UndeliverableException) {
+                Timber.w(e, "Undeliverable exception received, not sure what to do");
+            } else {
+                Thread.currentThread().getUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+            }
+        });
 
         if (config.fresco) {
             Fresco.initialize(application, config.imagePipelineConfig, config.draweeConfig);
