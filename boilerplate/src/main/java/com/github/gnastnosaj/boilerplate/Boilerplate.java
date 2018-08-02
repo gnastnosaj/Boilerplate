@@ -85,6 +85,13 @@ public class Boilerplate {
             Observable.<String>create(emitter -> {
                 Runtime.getRuntime().exec("logcat -c");
                 Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
+                try {
+                    process.exitValue();
+                    process = Runtime.getRuntime().exec("logcat | grep " + application.getPackageName());
+                    Timber.d("logcat | grep %s", application.getPackageName());
+                } catch (Throwable throwable) {
+                    Timber.d("logcat -e %s", application.getPackageName());
+                }
                 BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
                 while (true) {
                     String message = bufferedSource.readUtf8Line();
