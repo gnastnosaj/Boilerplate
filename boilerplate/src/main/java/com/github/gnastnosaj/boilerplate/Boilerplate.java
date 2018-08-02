@@ -22,6 +22,7 @@ import com.wanjian.cockroach.Cockroach;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -82,24 +83,36 @@ public class Boilerplate {
         });
 
         if (config.logcat != null) {
-            Observable.<String>create(emitter -> {
-                Runtime.getRuntime().exec("logcat -c");
-                Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
-                try {
-                    process.exitValue();
-                    process = Runtime.getRuntime().exec("logcat | grep " + application.getPackageName());
-                    Timber.d("logcat | grep %s", application.getPackageName());
-                } catch (Throwable throwable) {
-                    Timber.d("logcat -e %s", application.getPackageName());
-                }
-                BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
-                while (true) {
-                    String message = bufferedSource.readUtf8Line();
-                    if (message != null) {
-                        emitter.onNext(message);
-                    }
-                }
-            })
+            Observable
+                    .<Process>create(emitter -> {
+                        Runtime.getRuntime().exec("logcat -c");
+                        Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
+                        emitter.onNext(process);
+                        emitter.onComplete();
+                    })
+                    .delay(1, TimeUnit.SECONDS)
+                    .map(process -> {
+                        try {
+                            process.exitValue();
+                            Timber.d("logcat | grep %s", application.getPackageName());
+                            return Runtime.getRuntime().exec("logcat | grep " + application.getPackageName());
+                        } catch (Throwable throwable) {
+                            Timber.d("logcat -e %s", application.getPackageName());
+                            return process;
+                        }
+                    })
+                    .flatMap(process ->
+                            Observable.<String>create(emitter -> {
+                                        BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
+                                        while (true) {
+                                            String message = bufferedSource.readUtf8Line();
+                                            if (message != null) {
+                                                emitter.onNext(message);
+                                            }
+                                        }
+                                    }
+                            ).subscribeOn(Schedulers.io())
+                    )
                     .retry()
                     .subscribeOn(Schedulers.io())
                     .subscribe(message -> config.logcat.log(message), throwable -> Timber.e(throwable));
