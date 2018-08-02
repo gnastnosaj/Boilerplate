@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
 import io.reactivex.exceptions.UndeliverableException;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
@@ -85,15 +86,15 @@ public class Boilerplate {
         });
 
         if (config.logcat != null) {
-            Observable
+            Flowable
                     .defer(() -> {
                         Runtime.getRuntime().exec("logcat -c");
-                        return Observable
+                        return Flowable
                                 .<Process>create(emitter -> {
                                     Process process = Runtime.getRuntime().exec("logcat -e " + application.getPackageName());
                                     emitter.onNext(process);
                                     emitter.onComplete();
-                                })
+                                }, BackpressureStrategy.MISSING)
                                 .delay(1, TimeUnit.SECONDS)
                                 .observeOn(Schedulers.io())
                                 .map(process -> {
@@ -107,17 +108,20 @@ public class Boilerplate {
                                     }
                                 })
                                 .flatMap(process ->
-                                        Observable
+                                        Flowable
                                                 .<String>create(emitter -> {
-                                                            BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
-                                                            while (true) {
-                                                                String message = bufferedSource.readUtf8Line();
-                                                                if (message != null) {
-                                                                    emitter.onNext(message);
-                                                                }
+                                                    BufferedSource bufferedSource = Okio.buffer(Okio.source(process.getInputStream()));
+                                                    while (true) {
+                                                        if (emitter.requested() == 0) {
+                                                            Thread.sleep(500);
+                                                        } else {
+                                                            String message = bufferedSource.readUtf8Line();
+                                                            if (message != null) {
+                                                                emitter.onNext(message);
                                                             }
                                                         }
-                                                )
+                                                    }
+                                                }, BackpressureStrategy.BUFFER)
                                                 .doOnError(throwable -> process.destroy())
                                 )
                                 .doOnError(throwable -> Timber.e(throwable))
