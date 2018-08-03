@@ -128,6 +128,7 @@ public class Boilerplate {
                                 .retry();
                     })
                     .subscribeOn(Schedulers.io())
+                    .observeOn(Schedulers.single())
                     .subscribe(message -> config.logcat.log(message), throwable -> Timber.e(throwable));
         }
 
