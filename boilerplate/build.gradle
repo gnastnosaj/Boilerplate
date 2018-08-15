@@ -63,7 +63,7 @@ dependencies {
 
     api 'com.githang:status-bar-compat:+'//Apache License 2.0
     api 'net.qiujuer.genius:res:+'//Apache License 2.0
-    api 'com.mikepenz:iconics-core:3.0.4'//Apache License 2.0
+    api 'com.mikepenz:iconics-core:3.0.4@aar'//Apache License 2.0
 
     api 'com.github.gnastnosaj:Dynamicbox:17cd556'//MIT License
     api 'com.airbnb.android:lottie:+'//Apache License 2.0

@@ -1,1 +1,1 @@
-include ':rxbus', ':rxplus', ':net', ':boilerplate', ':animation', ':conceal'
+include ':rxbus', ':rxplus', ':net', ':boilerplate', ':animation', ':conceal', ':sample'
