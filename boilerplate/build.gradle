@@ -57,7 +57,7 @@ dependencies {
 
     api 'com.shizhefei:MVCHelper-Library:+'//Apache License 2.0
     api 'com.shizhefei:MVCHelper-SwipeRefresh:+'
-    api('me.drakeet.multitype:multitype:+') {//Apache License 2.0
+    api('me.drakeet.multitype:multitype:3.4.4') {//Apache License 2.0
         exclude group: 'com.android.support'
     }
 
@@ -66,6 +66,6 @@ dependencies {
     api 'com.mikepenz:iconics-core:3.0.4@aar'//Apache License 2.0
 
     api 'com.github.gnastnosaj:Dynamicbox:17cd556'//MIT License
-    api 'com.airbnb.android:lottie:+'//Apache License 2.0
+    api 'com.airbnb.android:lottie:2.7.0'//Apache License 2.0
     implementation 'com.wang.avi:library:+'//Apache License 2.0
 }
