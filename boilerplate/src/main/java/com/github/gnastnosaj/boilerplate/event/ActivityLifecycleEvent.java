@@ -2,10 +2,10 @@ package com.github.gnastnosaj.boilerplate.event;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 
 import com.github.gnastnosaj.boilerplate.rxbus.RxBus;
 
+import androidx.annotation.Nullable;
 import io.reactivex.Observable;
 
 /**

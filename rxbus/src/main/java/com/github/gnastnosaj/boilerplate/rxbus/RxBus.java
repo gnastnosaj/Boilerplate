@@ -1,12 +1,11 @@
 package com.github.gnastnosaj.boilerplate.rxbus;
 
-import android.support.annotation.NonNull;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import androidx.annotation.NonNull;
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
